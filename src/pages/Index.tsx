@@ -93,7 +93,7 @@ const Index = () => {
   };
 
   const handleIniciarTeleconsulta = () => {
-    navigate('/video-consulta');
+    navigate('/login-paciente');
   };
 
   if (showBookingFlow && selectedProfessional) {

@@ -94,9 +94,6 @@ const Header = () => {
             <Button onClick={handleScheduleClick} className="bg-purple-600 hover:bg-purple-700 text-white shadow-md">
               Encontrar Profissional
             </Button>
-            <Button onClick={() => navigate('/video-consulta')} className="bg-green-600 hover:bg-green-700 text-white shadow-md">
-              Iniciar Consulta
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -140,12 +137,6 @@ const Header = () => {
                   onClick={handleScheduleClick}
                 >
                   Encontrar Profissional
-                </Button>
-                <Button 
-                  className="justify-start bg-green-600 hover:bg-green-700 text-white"
-                  onClick={() => navigate('/video-consulta')}
-                >
-                  Iniciar Consulta
                 </Button>
               </div>
             </nav>

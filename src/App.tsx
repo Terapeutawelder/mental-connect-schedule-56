@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import ProfessionalRegistration from "./pages/ProfessionalRegistration";
 import Login from "./pages/Login";
+import LoginPaciente from "./pages/LoginPaciente";
 import ProfessionalAgenda from "./pages/ProfessionalAgenda";
 import AdminDashboard from "./pages/AdminDashboard";
 import ComoFunciona from "./pages/ComoFunciona";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/cadastro-profissional" element={<ProfessionalRegistration />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/login-paciente" element={<LoginPaciente />} />
           <Route path="/agenda-profissional" element={<ProfessionalAgenda />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
