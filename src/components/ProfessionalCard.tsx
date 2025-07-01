@@ -87,11 +87,10 @@ const ProfessionalCard = ({ professional, onBook }: ProfessionalCardProps) => {
       <CardFooter className="px-6 pt-0">
         <Button 
           onClick={onBook}
-          className="w-full bg-green-600 hover:bg-green-700 text-white"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white"
           disabled={!professional.available}
         >
-          <Video className="mr-2 h-4 w-4" />
-          Iniciar Teleconsulta
+          Selecione uma data
         </Button>
       </CardFooter>
     </Card>

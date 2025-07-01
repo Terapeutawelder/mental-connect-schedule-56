@@ -5,9 +5,10 @@ import { Play } from "lucide-react";
 interface HeroSectionProps {
   onFindProfessionalClick: () => void;
   onComoFuncionaClick: () => void;
+  onIniciarTeleconsultaClick?: () => void;
 }
 
-const HeroSection = ({ onFindProfessionalClick, onComoFuncionaClick }: HeroSectionProps) => {
+const HeroSection = ({ onFindProfessionalClick, onComoFuncionaClick, onIniciarTeleconsultaClick }: HeroSectionProps) => {
   return (
     <section className="purple-bg py-20 overflow-hidden text-white">
       <div className="container mx-auto px-4 relative z-10">
@@ -21,6 +22,13 @@ const HeroSection = ({ onFindProfessionalClick, onComoFuncionaClick }: HeroSecti
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="text-lg px-8 py-6 bg-white text-purple-600 hover:bg-purple-50" onClick={onFindProfessionalClick}>
               Encontrar Profissional
+            </Button>
+            <Button 
+              size="lg" 
+              className="text-lg px-8 py-6 bg-green-600 border-2 border-white text-white hover:bg-green-700 transition-colors" 
+              onClick={onIniciarTeleconsultaClick}
+            >
+              Iniciar Teleconsulta
             </Button>
             <Button 
               size="lg" 

@@ -71,8 +71,8 @@ const Index = () => {
   ]);
 
   const handleBookProfessional = (professional: Professional) => {
-    // Redirecionar diretamente para a teleconsulta
-    navigate(`/video-consulta?professional=${encodeURIComponent(professional.name)}&date=Hoje&time=14:00`);
+    // Redirecionar para a página de agendamento
+    navigate(`/agendar-consulta?professional=${professional.id}`);
   };
 
   const handleBackFromBooking = () => {
@@ -92,6 +92,10 @@ const Index = () => {
     navigate('/login');
   };
 
+  const handleIniciarTeleconsulta = () => {
+    navigate('/video-consulta');
+  };
+
   if (showBookingFlow && selectedProfessional) {
     return <BookingFlow professional={selectedProfessional} onBack={handleBackFromBooking} />;
   }
@@ -103,6 +107,7 @@ const Index = () => {
       <HeroSection 
         onFindProfessionalClick={handleScrollToProfessionals}
         onComoFuncionaClick={handleComoFuncionaClick}
+        onIniciarTeleconsultaClick={handleIniciarTeleconsulta}
       />
 
       <OnlineTherapySection onAgendarConsultaClick={handleScrollToProfessionals} />

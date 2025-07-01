@@ -17,6 +17,7 @@ import PoliticaDePrivacidade from "./pages/PoliticaDePrivacidade";
 import Contato from "./pages/Contato";
 import Afiliados from "./pages/Afiliados";
 import VideoConsultation from "./pages/VideoConsultation";
+import AgendarConsulta from "./pages/AgendarConsulta";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/politica-de-privacidade" element={<PoliticaDePrivacidade />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/afiliados" element={<Afiliados />} />
+          <Route path="/agendar-consulta" element={<AgendarConsulta />} />
           <Route path="/video-consulta" element={<VideoConsultation />} />
         </Routes>
       </BrowserRouter>
