@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Calendar, Menu, X, UserPlus } from "lucide-react";
+import { Calendar, Menu, X, UserPlus, Video } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +26,11 @@ const Header = () => {
 
   const handleScheduleClick = () => {
     scrollToSection('professionals-section');
+  };
+
+  const handleIniciarConsultaClick = () => {
+    navigate('/video-consulta');
+    setIsMenuOpen(false);
   };
 
   const handleSobreNosClick = () => {
@@ -91,8 +96,13 @@ const Header = () => {
             <Button variant="ghost" onClick={handleLoginClick} className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 font-medium">
               Entrar
             </Button>
-            <Button onClick={handleScheduleClick} className="bg-purple-600 hover:bg-purple-700 text-white shadow-md">
+            <Button onClick={handleIniciarConsultaClick} className="bg-green-600 hover:bg-green-700 text-white shadow-md">
+              <Video className="mr-1 h-4 w-4" />
               Iniciar Consulta
+            </Button>
+            <Button onClick={handleScheduleClick} className="bg-purple-600 hover:bg-purple-700 text-white shadow-md">
+              <Calendar className="mr-1 h-4 w-4" />
+              Agendar
             </Button>
           </div>
 
@@ -133,10 +143,18 @@ const Header = () => {
                   Entrar
                 </Button>
                 <Button 
+                  className="justify-start bg-green-600 hover:bg-green-700 text-white"
+                  onClick={handleIniciarConsultaClick}
+                >
+                  <Video className="mr-1 h-4 w-4" />
+                  Iniciar Consulta
+                </Button>
+                <Button 
                   className="justify-start bg-purple-600 hover:bg-purple-700 text-white"
                   onClick={handleScheduleClick}
                 >
-                  Iniciar Consulta
+                  <Calendar className="mr-1 h-4 w-4" />
+                  Agendar
                 </Button>
               </div>
             </nav>
