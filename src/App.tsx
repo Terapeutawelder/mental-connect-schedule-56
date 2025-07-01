@@ -18,6 +18,7 @@ import Contato from "./pages/Contato";
 import Afiliados from "./pages/Afiliados";
 import VideoConsultation from "./pages/VideoConsultation";
 import AgendarConsulta from "./pages/AgendarConsulta";
+import FinalizarAgendamento from "./pages/FinalizarAgendamento";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/contato" element={<Contato />} />
           <Route path="/afiliados" element={<Afiliados />} />
           <Route path="/agendar-consulta" element={<AgendarConsulta />} />
+          <Route path="/finalizar-agendamento" element={<FinalizarAgendamento />} />
           <Route path="/video-consulta" element={<VideoConsultation />} />
         </Routes>
       </BrowserRouter>

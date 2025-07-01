@@ -30,10 +30,8 @@ const AgendarConsulta = () => {
 
   const handleConfirmarAgendamento = () => {
     if (selectedDate) {
-      // Aqui você pode processar o agendamento
-      // Por enquanto, vamos redirecionar para a página de teleconsulta
       const dateStr = selectedDate.toLocaleDateString('pt-BR');
-      navigate(`/video-consulta?professional=${encodeURIComponent(professional.name)}&date=${dateStr}&time=14:00`);
+      navigate(`/finalizar-agendamento?professional=${professionalId}&date=${dateStr}&time=14:00`);
     }
   };
 
@@ -70,77 +68,72 @@ const AgendarConsulta = () => {
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage src={professional.image} alt={professional.name} />
-                    <AvatarFallback className="text-lg bg-purple-600 text-white">
-                      {professional.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900">{professional.name}</h3>
-                    <p className="text-purple-600 font-medium">{professional.specialty}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium text-sm">{professional.rating}</span>
-                    </div>
+        <div className="max-w-6xl mx-auto">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src={professional.image} alt={professional.name} />
+                  <AvatarFallback className="text-lg bg-purple-600 text-white">
+                    {professional.initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">{professional.name}</h3>
+                  <p className="text-purple-600 font-medium">{professional.specialty}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span className="font-medium text-sm">{professional.rating}</span>
                   </div>
                 </div>
-              </CardHeader>
-            </Card>
-
-            <Card className="mt-6">
-              <CardContent className="p-6">
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <div className="flex justify-between items-center">
-                    <div>
+                <div className="ml-auto">
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="text-center">
                       <p className="text-green-800 font-semibold text-lg">Valor da Consulta</p>
-                      <p className="text-green-600 text-sm">Pagamento facilitado</p>
+                      <div className="text-green-600 font-bold text-2xl">R$ 37,90</div>
                     </div>
-                    <div className="text-green-600 font-bold text-2xl">R$ 37,90</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Agendar Consulta
-                </CardTitle>
-                <p className="text-gray-600">Escolha a data e horário ideal para sua consulta</p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-semibold mb-4">Selecione a Data</h3>
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
-                      disabled={(date) => date < new Date()}
-                      className="rounded-md border"
-                    />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="font-semibold mb-4">Selecione a Data</h3>
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    disabled={(date) => date < new Date()}
+                    className="rounded-md border"
+                  />
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold mb-4">Horários Disponíveis</h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    {["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"].map((time) => (
+                      <Button
+                        key={time}
+                        variant="outline"
+                        className="text-sm h-10"
+                      >
+                        {time}
+                      </Button>
+                    ))}
                   </div>
                   
                   <Button 
                     onClick={handleConfirmarAgendamento}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    className="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white"
                     disabled={!selectedDate}
                   >
                     Confirmar Agendamento
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ const HeroSection = ({ onFindProfessionalClick, onComoFuncionaClick, onIniciarTe
             </Button>
             <Button 
               size="lg" 
-              className="text-lg px-8 py-6 bg-green-600 border-2 border-white text-white hover:bg-green-700 transition-colors" 
+              className="text-lg px-8 py-6 bg-purple-600 border-2 border-white text-white hover:bg-white hover:text-purple-600 transition-colors" 
               onClick={onIniciarTeleconsultaClick}
             >
               Iniciar Teleconsulta

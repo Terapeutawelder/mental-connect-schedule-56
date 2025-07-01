@@ -66,12 +66,6 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <button 
-              onClick={handleComoFuncionaClick}
-              className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
-            >
-              Como Funciona
-            </button>
-            <button 
               onClick={handleSobreNosClick}
               className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
             >
@@ -97,9 +91,11 @@ const Header = () => {
             <Button variant="ghost" onClick={handleLoginClick} className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 font-medium">
               Entrar
             </Button>
-            <Button onClick={handleScheduleClick} className="bg-purple-600 hover:bg-purple-700 text-white shadow-md text-lg px-8 py-6">
-              <Calendar className="mr-2 h-5 w-5" />
-              Agendar
+            <Button onClick={handleScheduleClick} className="bg-purple-600 hover:bg-purple-700 text-white shadow-md">
+              Encontrar Profissional
+            </Button>
+            <Button onClick={() => navigate('/video-consulta')} className="bg-green-600 hover:bg-green-700 text-white shadow-md">
+              Iniciar Consulta
             </Button>
           </div>
 
@@ -116,12 +112,6 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t py-4">
             <nav className="flex flex-col space-y-4">
-              <button 
-                onClick={handleComoFuncionaClick}
-                className="text-gray-700 hover:text-purple-600 transition-colors text-left font-medium"
-              >
-                Como Funciona
-              </button>
               <button 
                 onClick={handleSobreNosClick}
                 className="text-gray-700 hover:text-purple-600 transition-colors text-left font-medium"
@@ -146,11 +136,16 @@ const Header = () => {
                   Entrar
                 </Button>
                 <Button 
-                  className="justify-start bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-6"
+                  className="justify-start bg-purple-600 hover:bg-purple-700 text-white"
                   onClick={handleScheduleClick}
                 >
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Agendar
+                  Encontrar Profissional
+                </Button>
+                <Button 
+                  className="justify-start bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => navigate('/video-consulta')}
+                >
+                  Iniciar Consulta
                 </Button>
               </div>
             </nav>
