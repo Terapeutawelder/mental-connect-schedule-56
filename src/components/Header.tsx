@@ -96,7 +96,7 @@ const Header = () => {
             <Button variant="ghost" onClick={handleLoginClick} className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 font-medium">
               Entrar
             </Button>
-            <Button onClick={handleIniciarConsultaClick} className="bg-green-600 hover:bg-green-700 text-white shadow-md">
+            <Button onClick={handleIniciarConsultaClick} className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md">
               <Video className="mr-1 h-4 w-4" />
               Iniciar Consulta
             </Button>
@@ -143,7 +143,7 @@ const Header = () => {
                   Entrar
                 </Button>
                 <Button 
-                  className="justify-start bg-green-600 hover:bg-green-700 text-white"
+                  className="justify-start bg-primary hover:bg-primary/90 text-primary-foreground"
                   onClick={handleIniciarConsultaClick}
                 >
                   <Video className="mr-1 h-4 w-4" />
