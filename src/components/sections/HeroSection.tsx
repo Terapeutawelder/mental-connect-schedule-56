@@ -22,10 +22,10 @@ const HeroSection = ({ onFindProfessionalClick, onComoFuncionaClick, onIniciarTe
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="text-lg px-8 py-6 bg-green-600 border-2 border-white text-white hover:bg-white hover:text-green-600 transition-colors" 
-              onClick={onIniciarTeleconsultaClick}
+              className="text-lg px-8 py-6 bg-white text-purple-600 hover:bg-purple-50" 
+              onClick={onFindProfessionalClick}
             >
-              Iniciar Consulta
+              Encontrar Profissional
             </Button>
             <Button 
               size="lg" 

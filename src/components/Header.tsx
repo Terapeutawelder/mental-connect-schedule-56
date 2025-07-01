@@ -92,7 +92,7 @@ const Header = () => {
               Entrar
             </Button>
             <Button onClick={handleScheduleClick} className="bg-purple-600 hover:bg-purple-700 text-white shadow-md">
-              Encontrar Profissional
+              Iniciar Consulta
             </Button>
           </div>
 
@@ -136,7 +136,7 @@ const Header = () => {
                   className="justify-start bg-purple-600 hover:bg-purple-700 text-white"
                   onClick={handleScheduleClick}
                 >
-                  Encontrar Profissional
+                  Iniciar Consulta
                 </Button>
               </div>
             </nav>
