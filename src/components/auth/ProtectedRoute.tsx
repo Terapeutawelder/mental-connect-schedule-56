@@ -13,7 +13,7 @@ const ProtectedRoute = ({
   requiredRole,
   redirectTo = '/auth' 
 }: ProtectedRouteProps) => {
-  const { user, profile, loading } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,12 +25,12 @@ const ProtectedRoute = ({
       }
 
       // If specific role is required and user doesn't have it, redirect to home
-      if (requiredRole && profile?.role !== requiredRole) {
+      if (requiredRole && user?.role !== requiredRole) {
         navigate('/');
         return;
       }
     }
-  }, [user, profile, loading, requiredRole, redirectTo, navigate]);
+  }, [user, loading, requiredRole, redirectTo, navigate]);
 
   // Show loading while checking authentication
   if (loading) {
@@ -42,7 +42,7 @@ const ProtectedRoute = ({
   }
 
   // If user is not authenticated or doesn't have required role, don't render children
-  if (!user || (requiredRole && profile?.role !== requiredRole)) {
+  if (!user || (requiredRole && user?.role !== requiredRole)) {
     return null;
   }
 

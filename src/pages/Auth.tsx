@@ -20,7 +20,7 @@ const Auth = () => {
   
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { signIn, signUp, resetPassword, user, profile, loading } = useAuth();
+  const { signIn, signUp, resetPassword, user, loading } = useAuth();
 
   // Login form
   const loginForm = useForm<SignInFormData>({
@@ -51,9 +51,9 @@ const Auth = () => {
   });
 
   useEffect(() => {
-    if (user && profile && !loading) {
+    if (user && !loading) {
       // Redirect based on user role
-      switch (profile.role) {
+      switch (user.role) {
         case 'admin':
           navigate('/admin');
           break;
@@ -67,7 +67,7 @@ const Auth = () => {
           navigate('/');
       }
     }
-  }, [user, profile, loading, navigate]);
+  }, [user, loading, navigate]);
 
   const handleLogin = async (data: SignInFormData) => {
     try {
