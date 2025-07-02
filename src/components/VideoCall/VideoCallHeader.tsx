@@ -28,11 +28,19 @@ export const VideoCallHeader = ({
 }: VideoCallHeaderProps) => {
   return (
     <div className="bg-gray-900 text-white p-4 flex justify-between items-center">
-      <div>
-        <h2 className="text-lg font-semibold">Teleconsulta</h2>
-        <p className="text-sm text-gray-300">
-          {professionalName} • {callDuration}
-        </p>
+      <div className="flex items-center space-x-4">
+        <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+          <span className="text-white text-sm font-bold">
+            {professionalName.split(' ')[0][0]}{professionalName.split(' ')[1]?.[0]}
+          </span>
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold">{professionalName}</h2>
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+            <span className="text-sm text-green-400">Conectado • {callDuration}</span>
+          </div>
+        </div>
       </div>
       <div className="flex items-center space-x-2">
         {isRecording && (

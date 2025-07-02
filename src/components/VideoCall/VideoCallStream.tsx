@@ -28,12 +28,6 @@ export const VideoCallStream = ({
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-800">
             <div className="text-center text-white">
-              <div className="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold">
-                  {professionalName.split(' ')[0][0]}{professionalName.split(' ')[1]?.[0]}
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">{professionalName}</h3>
               <p className="text-gray-300 mb-4">Aguardando conexão...</p>
               <Button onClick={handleStartCall} className="bg-green-600 hover:bg-green-700">
                 <Phone className="mr-2 h-4 w-4" />
