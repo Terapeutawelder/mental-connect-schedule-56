@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import ProfessionalRegistration from "./pages/ProfessionalRegistration";
 import Auth from "./pages/Auth";
@@ -35,8 +36,16 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/cadastro-profissional" element={<ProfessionalRegistration />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/agenda-profissional" element={<ProfessionalAgenda />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/agenda-profissional" element={
+            <ProtectedRoute requiredRole="professional">
+              <ProfessionalAgenda />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          } />
           <Route path="/como-funciona" element={<ComoFunciona />} />
           <Route path="/sobre-nos" element={<SobreNos />} />
           <Route path="/contrato" element={<Contrato />} />

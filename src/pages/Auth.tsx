@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,21 +11,44 @@ import { useToast } from "@/hooks/use-toast";
 import { LogIn, User, Shield, UserPlus, KeyRound, Stethoscope } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { signInSchema, signUpSchema, resetPasswordSchema, sanitizeInput } from "@/lib/validationSchemas";
+import type { SignInFormData, SignUpFormData, ResetPasswordFormData } from "@/lib/validationSchemas";
 
 const Auth = () => {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
-  const [signupName, setSignupName] = useState("");
-  const [signupRole, setSignupRole] = useState("patient");
-  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
   
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signIn, signUp, resetPassword, user, profile, loading } = useAuth();
+
+  // Login form
+  const loginForm = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
+
+  // Signup form
+  const signupForm = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      full_name: "",
+      role: "patient"
+    }
+  });
+
+  // Reset password form
+  const resetForm = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      email: ""
+    }
+  });
 
   useEffect(() => {
     if (user && profile && !loading) {
@@ -44,92 +69,99 @@ const Auth = () => {
     }
   }, [user, profile, loading, navigate]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!loginEmail || !loginPassword) {
-      toast({
-        title: "Erro no login",
-        description: "Por favor, preencha todos os campos.",
-        variant: "destructive",
-      });
-      return;
-    }
+  const handleLogin = async (data: SignInFormData) => {
+    try {
+      // Sanitize inputs
+      const sanitizedData = {
+        email: sanitizeInput(data.email.toLowerCase()),
+        password: data.password
+      };
 
-    const { error } = await signIn(loginEmail, loginPassword);
-    
-    if (error) {
+      const { error } = await signIn(sanitizedData.email, sanitizedData.password);
+      
+      if (error) {
+        toast({
+          title: "Erro no login",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Login realizado com sucesso!",
+          description: "Bem-vindo de volta.",
+        });
+      }
+    } catch (error) {
       toast({
         title: "Erro no login",
-        description: error.message,
+        description: "Ocorreu um erro inesperado.",
         variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta.",
       });
     }
   };
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!signupEmail || !signupPassword || !signupName) {
-      toast({
-        title: "Erro no cadastro",
-        description: "Por favor, preencha todos os campos.",
-        variant: "destructive",
-      });
-      return;
-    }
+  const handleSignUp = async (data: SignUpFormData) => {
+    try {
+      // Sanitize inputs
+      const sanitizedData = {
+        email: sanitizeInput(data.email.toLowerCase()),
+        password: data.password,
+        full_name: sanitizeInput(data.full_name),
+        role: data.role
+      };
 
-    const { error } = await signUp(signupEmail, signupPassword, {
-      full_name: signupName,
-      role: signupRole
-    });
-    
-    if (error) {
+      const { error } = await signUp(sanitizedData.email, sanitizedData.password, {
+        full_name: sanitizedData.full_name,
+        role: sanitizedData.role
+      });
+      
+      if (error) {
+        toast({
+          title: "Erro no cadastro",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Cadastro realizado com sucesso!",
+          description: "Verifique seu email para confirmar sua conta.",
+        });
+        signupForm.reset();
+      }
+    } catch (error) {
       toast({
         title: "Erro no cadastro",
-        description: error.message,
+        description: "Ocorreu um erro inesperado.",
         variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Cadastro realizado com sucesso!",
-        description: "Verifique seu email para confirmar sua conta.",
       });
     }
   };
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!forgotPasswordEmail) {
+  const handleForgotPassword = async (data: ResetPasswordFormData) => {
+    try {
+      const sanitizedEmail = sanitizeInput(data.email.toLowerCase());
+      const { error } = await resetPassword(sanitizedEmail);
+      
+      if (error) {
+        toast({
+          title: "Erro",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Email enviado!",
+          description: "Verifique sua caixa de entrada para redefinir sua senha.",
+        });
+        resetForm.reset();
+        setShowForgotPassword(false);
+      }
+    } catch (error) {
       toast({
         title: "Erro",
-        description: "Por favor, insira seu email.",
+        description: "Ocorreu um erro inesperado.",
         variant: "destructive",
       });
-      return;
-    }
-
-    const { error } = await resetPassword(forgotPasswordEmail);
-    
-    if (error) {
-      toast({
-        title: "Erro",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Email enviado!",
-        description: "Verifique sua caixa de entrada para redefinir sua senha.",
-      });
-      setForgotPasswordEmail("");
-      setShowForgotPassword(false);
     }
   };
 
@@ -161,21 +193,22 @@ const Auth = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleForgotPassword} className="space-y-4">
+              <form onSubmit={resetForm.handleSubmit(handleForgotPassword)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="forgot-email">Email</Label>
                   <Input
                     id="forgot-email"
                     type="email"
                     placeholder="seu@email.com"
-                    value={forgotPasswordEmail}
-                    onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                    required
+                    {...resetForm.register("email")}
                   />
+                  {resetForm.formState.errors.email && (
+                    <p className="text-sm text-destructive">{resetForm.formState.errors.email.message}</p>
+                  )}
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={resetForm.formState.isSubmitting}>
                   <KeyRound className="mr-2 h-4 w-4" />
-                  Enviar link de recuperação
+                  {resetForm.formState.isSubmitting ? "Enviando..." : "Enviar link de recuperação"}
                 </Button>
               </form>
 
@@ -224,17 +257,18 @@ const Auth = () => {
               </TabsList>
 
               <TabsContent value="login">
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="login-email">Email</Label>
                     <Input
                       id="login-email"
                       type="email"
                       placeholder="seu@email.com"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      required
+                      {...loginForm.register("email")}
                     />
+                    {loginForm.formState.errors.email && (
+                      <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="login-password">Senha</Label>
@@ -242,30 +276,32 @@ const Auth = () => {
                       id="login-password"
                       type="password"
                       placeholder="••••••••"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      required
+                      {...loginForm.register("password")}
                     />
+                    {loginForm.formState.errors.password && (
+                      <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
+                    )}
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
                     <LogIn className="mr-2 h-4 w-4" />
-                    Entrar
+                    {loginForm.formState.isSubmitting ? "Entrando..." : "Entrar"}
                   </Button>
                 </form>
               </TabsContent>
 
               <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4">
+                <form onSubmit={signupForm.handleSubmit(handleSignUp)} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Nome Completo</Label>
                     <Input
                       id="signup-name"
                       type="text"
                       placeholder="Seu nome completo"
-                      value={signupName}
-                      onChange={(e) => setSignupName(e.target.value)}
-                      required
+                      {...signupForm.register("full_name")}
                     />
+                    {signupForm.formState.errors.full_name && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.full_name.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
@@ -273,10 +309,11 @@ const Auth = () => {
                       id="signup-email"
                       type="email"
                       placeholder="seu@email.com"
-                      value={signupEmail}
-                      onChange={(e) => setSignupEmail(e.target.value)}
-                      required
+                      {...signupForm.register("email")}
                     />
+                    {signupForm.formState.errors.email && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.email.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Senha</Label>
@@ -284,14 +321,18 @@ const Auth = () => {
                       id="signup-password"
                       type="password"
                       placeholder="••••••••"
-                      value={signupPassword}
-                      onChange={(e) => setSignupPassword(e.target.value)}
-                      required
+                      {...signupForm.register("password")}
                     />
+                    {signupForm.formState.errors.password && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.password.message}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Senha deve conter pelo menos 8 caracteres, incluindo maiúscula, minúscula, número e caractere especial.
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-role">Tipo de usuário</Label>
-                    <Select value={signupRole} onValueChange={setSignupRole}>
+                    <Select onValueChange={(value) => signupForm.setValue("role", value as "patient" | "professional")} defaultValue="patient">
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o tipo de usuário" />
                       </SelectTrigger>
@@ -310,10 +351,13 @@ const Auth = () => {
                         </SelectItem>
                       </SelectContent>
                     </Select>
+                    {signupForm.formState.errors.role && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.role.message}</p>
+                    )}
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={signupForm.formState.isSubmitting}>
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Cadastrar
+                    {signupForm.formState.isSubmitting ? "Cadastrando..." : "Cadastrar"}
                   </Button>
                 </form>
               </TabsContent>

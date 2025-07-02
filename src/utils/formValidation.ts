@@ -1,4 +1,8 @@
 
+// Legacy validation hook - deprecated in favor of Zod schemas
+// This file is kept for backwards compatibility but should be migrated to use
+// the new validation schemas in @/lib/validationSchemas.ts
+
 import { useToast } from "@/hooks/use-toast";
 
 interface FormData {
@@ -10,6 +14,9 @@ interface FormData {
   confirmPassword: string;
 }
 
+/**
+ * @deprecated Use validation schemas from @/lib/validationSchemas.ts instead
+ */
 export const useFormValidation = () => {
   const { toast } = useToast();
 
@@ -20,7 +27,7 @@ export const useFormValidation = () => {
     acceptedTerms: boolean,
     acceptedPrivacy: boolean
   ): boolean => {
-    // Validação básica
+    // Basic validation - consider migrating to Zod schemas
     if (!formData.name || !formData.email || !formData.cpf || !formData.registrationNumber || !formData.password || !formData.confirmPassword) {
       toast({
         title: "Erro",
