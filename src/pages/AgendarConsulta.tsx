@@ -11,6 +11,7 @@ const AgendarConsulta = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedTime, setSelectedTime] = useState<string>("");
   
   const professionalId = searchParams.get('professional') || '1';
   
@@ -29,9 +30,9 @@ const AgendarConsulta = () => {
   };
 
   const handleConfirmarAgendamento = () => {
-    if (selectedDate) {
+    if (selectedDate && selectedTime) {
       const dateStr = selectedDate.toLocaleDateString('pt-BR');
-      navigate(`/finalizar-agendamento?professional=${professionalId}&date=${dateStr}&time=14:00`);
+      navigate(`/finalizar-agendamento?professional=${professionalId}&date=${dateStr}&time=${selectedTime}`);
     }
   };
 
@@ -111,22 +112,23 @@ const AgendarConsulta = () => {
                 
                 <div>
                   <h3 className="font-semibold mb-4">Horários Disponíveis</h3>
-                  <div className="grid grid-cols-3 gap-2">
+                   <div className="grid grid-cols-3 gap-2">
                     {["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"].map((time) => (
                       <Button
                         key={time}
-                        variant="outline"
+                        variant={selectedTime === time ? "default" : "outline"}
                         className="text-sm h-10"
+                        onClick={() => setSelectedTime(time)}
                       >
                         {time}
                       </Button>
                     ))}
                   </div>
                   
-                  <Button 
+                   <Button 
                     onClick={handleConfirmarAgendamento}
                     className="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white"
-                    disabled={!selectedDate}
+                    disabled={!selectedDate || !selectedTime}
                   >
                     Confirmar Agendamento
                   </Button>

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, Calendar, Clock, User, Copy, MessageCircle, Video, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { saveAppointment } from "@/utils/appointmentStorage";
 
 const ConfirmacaoAgendamento = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const ConfirmacaoAgendamento = () => {
   
   const patientName = searchParams.get('name') || '';
   const phone = searchParams.get('phone') || '';
+  const email = searchParams.get('email') || '';
   const professionalId = searchParams.get('professional') || '1';
   const date = searchParams.get('date') || '';
   const time = searchParams.get('time') || '';
@@ -21,6 +23,23 @@ const ConfirmacaoAgendamento = () => {
   const [accessLink] = useState(() => 
     `https://teleconsulta.conexaomental.com/sala/${professionalId}-${Date.now()}`
   );
+
+  // Salvar agendamento quando a página carregar
+  useEffect(() => {
+    if (patientName && phone && email && date && time) {
+      saveAppointment({
+        patientName,
+        patientPhone: phone,
+        patientEmail: email,
+        professionalId,
+        date,
+        time,
+        status: "agendado",
+        type: "consulta",
+        accessLink
+      });
+    }
+  }, [patientName, phone, email, professionalId, date, time, accessLink]);
 
   // Dados do profissional
   const professional = {

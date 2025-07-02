@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Share2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import ReferralSection from "@/components/ReferralSection";
 import AgendaSummary from "@/components/AgendaSummary";
 import AppointmentsSection from "@/components/AppointmentsSection";
+import { getAppointmentsByProfessional } from "@/utils/appointmentStorage";
 
 interface Appointment {
   id: number;
@@ -22,50 +23,27 @@ interface Appointment {
 const ProfessionalAgenda = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   
-  // Dados mock para demonstração
-  const [appointments] = useState<Appointment[]>([
-    {
-      id: 1,
-      patientName: "Maria Silva",
-      patientPhone: "(11) 99999-9999",
-      patientEmail: "maria@email.com",
-      date: "2024-01-15",
-      time: "09:00",
-      status: "agendado",
-      type: "consulta"
-    },
-    {
-      id: 2,
-      patientName: "João Santos",
-      patientPhone: "(11) 88888-8888",
-      patientEmail: "joao@email.com",
-      date: "2024-01-15",
-      time: "10:30",
-      status: "confirmado",
-      type: "retorno"
-    },
-    {
-      id: 3,
-      patientName: "Ana Costa",
-      patientPhone: "(11) 77777-7777",
-      patientEmail: "ana@email.com",
-      date: "2024-01-15",
-      time: "14:00",
-      status: "agendado",
-      type: "consulta"
-    },
-    {
-      id: 4,
-      patientName: "Pedro Lima",
-      patientPhone: "(11) 66666-6666",
-      patientEmail: "pedro@email.com",
-      date: "2024-01-16",
-      time: "09:30",
-      status: "agendado",
-      type: "consulta"
-    }
-  ]);
+  // Carregar agendamentos do localStorage
+  useEffect(() => {
+    const professionalId = "1"; // ID do profissional logado
+    const storedAppointments = getAppointmentsByProfessional(professionalId);
+    
+    // Converter para o formato esperado pelo componente
+    const formattedAppointments = storedAppointments.map((apt, index) => ({
+      id: parseInt(apt.id) || index + 1,
+      patientName: apt.patientName,
+      patientPhone: apt.patientPhone,
+      patientEmail: apt.patientEmail,
+      date: apt.date,
+      time: apt.time,
+      status: apt.status,
+      type: apt.type
+    }));
+    
+    setAppointments(formattedAppointments);
+  }, []);
 
   const handleLogout = () => {
     toast({
@@ -75,8 +53,9 @@ const ProfessionalAgenda = () => {
     navigate("/login");
   };
 
-  const todayAppointments = appointments.filter(apt => apt.date === "2024-01-15");
-  const upcomingAppointments = appointments.filter(apt => apt.date > "2024-01-15");
+  const today = new Date().toLocaleDateString('pt-BR');
+  const todayAppointments = appointments.filter(apt => apt.date === today);
+  const upcomingAppointments = appointments.filter(apt => new Date(apt.date.split('/').reverse().join('-')) > new Date());
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
