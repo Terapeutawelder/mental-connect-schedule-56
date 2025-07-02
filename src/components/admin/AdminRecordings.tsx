@@ -24,8 +24,18 @@ const AdminRecordings = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const storedRecordings = JSON.parse(localStorage.getItem('consultation_recordings') || '[]');
-    setRecordings(storedRecordings);
+    // Carregar gravações de todos os profissionais
+    const allRecordings: Recording[] = [];
+    const keys = Object.keys(localStorage);
+    
+    keys.forEach(key => {
+      if (key.startsWith('professional_recordings_')) {
+        const recordings = JSON.parse(localStorage.getItem(key) || '[]');
+        allRecordings.push(...recordings);
+      }
+    });
+    
+    setRecordings(allRecordings);
   }, []);
 
   const filteredRecordings = recordings.filter(recording =>
@@ -55,9 +65,23 @@ const AdminRecordings = () => {
   };
 
   const handleDelete = (recordingId: string) => {
-    const updatedRecordings = recordings.filter(r => r.id !== recordingId);
-    setRecordings(updatedRecordings);
-    localStorage.setItem('consultation_recordings', JSON.stringify(updatedRecordings));
+    const recordingToDelete = recordings.find(r => r.id === recordingId);
+    if (!recordingToDelete) return;
+    
+    // Encontrar a chave correta no localStorage
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('professional_recordings_')) {
+        const professionalRecordings = JSON.parse(localStorage.getItem(key) || '[]');
+        const updatedRecordings = professionalRecordings.filter((r: Recording) => r.id !== recordingId);
+        if (professionalRecordings.length !== updatedRecordings.length) {
+          localStorage.setItem(key, JSON.stringify(updatedRecordings));
+        }
+      }
+    });
+    
+    // Atualizar estado local
+    setRecordings(recordings.filter(r => r.id !== recordingId));
     
     toast({
       title: "Gravação excluída",

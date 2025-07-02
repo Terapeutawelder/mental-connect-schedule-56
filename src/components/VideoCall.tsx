@@ -53,13 +53,15 @@ const VideoCall = ({
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ 
-      video: isVideoOn ? { width: 1280, height: 720 } : false, 
-      audio: { echoCancellation: true, noiseSuppression: true } 
-    })
-      .then(stream => {
+    const initMedia = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { width: 1280, height: 720 }, 
+          audio: { echoCancellation: true, noiseSuppression: true } 
+        });
+        
         streamRef.current = stream;
-        if (localVideoRef.current && isVideoOn) {
+        if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
         
@@ -74,8 +76,19 @@ const VideoCall = ({
         if (audioTrack) {
           audioTrack.enabled = isAudioOn;
         }
-      })
-      .catch(err => console.log("Erro ao acessar câmera:", err));
+      } catch (err) {
+        console.error("Erro ao acessar mídia:", err);
+        // Tentar apenas áudio se vídeo falhar
+        try {
+          const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          streamRef.current = audioStream;
+        } catch (audioErr) {
+          console.error("Erro ao acessar áudio:", audioErr);
+        }
+      }
+    };
+    
+    initMedia();
   }, []);
 
   useEffect(() => {
@@ -173,13 +186,13 @@ const VideoCall = ({
       blob: blob
     };
     
-    // Salvar no localStorage para o admin
-    const recordings = JSON.parse(localStorage.getItem('consultation_recordings') || '[]');
-    recordings.push({
+    // Salvar no localStorage apenas para o profissional
+    const professionalRecordings = JSON.parse(localStorage.getItem(`professional_recordings_${professionalName}`) || '[]');
+    professionalRecordings.push({
       ...recording,
       blobUrl: URL.createObjectURL(blob)
     });
-    localStorage.setItem('consultation_recordings', JSON.stringify(recordings));
+    localStorage.setItem(`professional_recordings_${professionalName}`, JSON.stringify(professionalRecordings));
   };
 
   const handleSendMessage = () => {
