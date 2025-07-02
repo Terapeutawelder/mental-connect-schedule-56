@@ -80,9 +80,19 @@ const Auth = () => {
       const { error } = await signIn(sanitizedData.email, sanitizedData.password);
       
       if (error) {
+        // Better error messages for common cases
+        let errorMessage = error.message;
+        if (error.message?.includes('Invalid login credentials')) {
+          errorMessage = 'Email ou senha incorretos. Verifique seus dados e tente novamente.';
+        } else if (error.message?.includes('Email not confirmed')) {
+          errorMessage = 'Por favor, confirme seu email antes de fazer login. Verifique sua caixa de entrada.';
+        } else if (error.message?.includes('Too many requests')) {
+          errorMessage = 'Muitas tentativas de login. Aguarde alguns minutos antes de tentar novamente.';
+        }
+        
         toast({
           title: "Erro no login",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
         });
       } else {
@@ -116,9 +126,21 @@ const Auth = () => {
       });
       
       if (error) {
+        // Better error messages for common cases
+        let errorMessage = error.message;
+        if (error.message?.includes('User already registered')) {
+          errorMessage = 'Este email já está cadastrado. Tente fazer login ou recuperar sua senha.';
+        } else if (error.message?.includes('Password should be at least')) {
+          errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+        } else if (error.message?.includes('Invalid email')) {
+          errorMessage = 'Por favor, insira um email válido.';
+        } else if (error.message?.includes('Database error')) {
+          errorMessage = 'Erro temporário no servidor. Tente novamente em alguns minutos.';
+        }
+        
         toast({
           title: "Erro no cadastro",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
         });
       } else {

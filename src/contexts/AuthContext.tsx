@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching profile:', error);
@@ -106,30 +106,48 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signUp = async (email: string, password: string, userData?: { full_name?: string; role?: string }) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: userData?.full_name || '',
-          role: userData?.role || 'patient'
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            full_name: userData?.full_name || '',
+            role: userData?.role || 'patient'
+          }
         }
-      }
-    });
+      });
 
-    return { error };
+      if (error) {
+        console.error('SignUp error:', error);
+      }
+
+      return { error };
+    } catch (error) {
+      console.error('Unexpected SignUp error:', error);
+      return { error: { message: 'Erro inesperado durante o cadastro' } };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-    return { error };
+      if (error) {
+        console.error('SignIn error:', error);
+      }
+
+      return { error };
+    } catch (error) {
+      console.error('Unexpected SignIn error:', error);
+      return { error: { message: 'Erro inesperado durante o login' } };
+    }
   };
 
   const signOut = async () => {
