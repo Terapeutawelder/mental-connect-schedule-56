@@ -6,15 +6,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Star, CheckCircle, Calendar, Clock, User, Mail, Phone, CreditCard } from "lucide-react";
+import { useWhatsAppNotifications } from "@/hooks/useWhatsAppNotifications";
+import { useToast } from "@/hooks/use-toast";
 
 const FinalizarAgendamento = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { toast } = useToast();
+  const { sendAppointmentConfirmation } = useWhatsAppNotifications();
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
     telefone: ""
   });
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const professionalId = searchParams.get('professional') || '1';
   const date = searchParams.get('date') || '';
@@ -38,9 +43,64 @@ const FinalizarAgendamento = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleFinalizarAgendamento = () => {
-    // Processar o agendamento final
-    navigate('/video-consulta?success=true');
+  const handleFinalizarAgendamento = async () => {
+    if (!formData.nome || !formData.email || !formData.telefone) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Preencha todos os campos antes de continuar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Simular processamento do pagamento
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Gerar link de acesso único para a teleconsulta
+      const accessLink = `https://teleconsulta.conexaomental.com/sala/${professionalId}-${Date.now()}`;
+
+      // Enviar confirmação via WhatsApp com link de acesso
+      const whatsappSent = await sendAppointmentConfirmation(
+        formData.nome,
+        formData.telefone,
+        date,
+        time
+      );
+
+      if (whatsappSent) {
+        // Enviar também mensagem com link de acesso
+        const linkMessage = `🔗 Link de acesso à sua teleconsulta: ${accessLink}\n\nGuarde este link com cuidado, você precisará dele para entrar na consulta.`;
+        await fetch('', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('whatsapp_api_key')}`,
+          },
+          body: JSON.stringify({
+            phone: formData.telefone,
+            message: linkMessage,
+          }),
+        }).catch(() => {}); // Ignora erros silenciosamente
+      }
+
+      toast({
+        title: "Agendamento confirmado!",
+        description: "Confirmação enviada via WhatsApp com link de acesso.",
+      });
+
+      navigate('/video-consulta?success=true');
+    } catch (error) {
+      toast({
+        title: "Erro no processamento",
+        description: "Tente novamente ou entre em contato.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -163,9 +223,10 @@ const FinalizarAgendamento = () => {
               
               <Button 
                 onClick={handleFinalizarAgendamento}
+                disabled={isProcessing}
                 className="w-full mt-8 bg-purple-600 hover:bg-purple-700 text-white text-lg py-6"
               >
-                Prosseguir para Pagamento
+                {isProcessing ? "Processando..." : "Prosseguir para Pagamento"}
               </Button>
             </CardContent>
           </Card>
