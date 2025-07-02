@@ -84,9 +84,28 @@ export const useVideoCall = ({ callStartTime, patientName, professionalName, onE
     setIsVideoOn(newVideoState);
     
     if (streamRef.current) {
-      const videoTrack = streamRef.current.getVideoTracks()[0];
-      if (videoTrack) {
-        videoTrack.enabled = newVideoState;
+      const videoTracks = streamRef.current.getVideoTracks();
+      videoTracks.forEach(track => {
+        if (newVideoState) {
+          track.enabled = true;
+        } else {
+          track.stop();
+        }
+      });
+      
+      if (!newVideoState) {
+        // Re-create video stream when turning back on
+        navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } })
+          .then(newStream => {
+            const newVideoTrack = newStream.getVideoTracks()[0];
+            if (newVideoTrack && streamRef.current) {
+              streamRef.current.addTrack(newVideoTrack);
+              if (localVideoRef.current) {
+                localVideoRef.current.srcObject = streamRef.current;
+              }
+            }
+          })
+          .catch(err => console.error("Erro ao recriar stream de vídeo:", err));
       }
     }
   };

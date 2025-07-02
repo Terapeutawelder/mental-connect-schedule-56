@@ -22,17 +22,8 @@ export const VideoCallStream = ({
     <div className="flex-1 relative bg-gray-900">
       <div className="w-full h-full relative">
         {isCallActive ? (
-          <div className="w-full h-full flex items-center justify-center bg-gray-900">
-            <div className="text-center text-white">
-              <div className="w-32 h-32 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl font-bold">
-                  {professionalName.split(' ')[0][0]}{professionalName.split(' ')[1]?.[0]}
-                </span>
-              </div>
-              <h3 className="text-2xl font-semibold mb-2">{professionalName}</h3>
-              <p className="text-green-400 mb-2">🟢 Conectado</p>
-              <p className="text-gray-300">Consulta em andamento</p>
-            </div>
+          <div className="w-full h-full bg-gray-900">
+            {/* Área principal da consulta - sem interface visual */}
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-800">
