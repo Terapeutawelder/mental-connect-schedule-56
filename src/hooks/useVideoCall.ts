@@ -86,15 +86,12 @@ export const useVideoCall = ({ callStartTime, patientName, professionalName, onE
     if (streamRef.current) {
       const videoTracks = streamRef.current.getVideoTracks();
       videoTracks.forEach(track => {
-        if (newVideoState) {
-          track.enabled = true;
-        } else {
-          track.stop();
-        }
+        track.stop();
+        streamRef.current?.removeTrack(track);
       });
       
-      if (!newVideoState) {
-        // Re-create video stream when turning back on
+      if (newVideoState) {
+        // Recriar stream de vídeo quando ligar
         navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } })
           .then(newStream => {
             const newVideoTrack = newStream.getVideoTracks()[0];
@@ -106,6 +103,11 @@ export const useVideoCall = ({ callStartTime, patientName, professionalName, onE
             }
           })
           .catch(err => console.error("Erro ao recriar stream de vídeo:", err));
+      } else {
+        // Limpar o vídeo local quando desligar
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = null;
+        }
       }
     }
   };
