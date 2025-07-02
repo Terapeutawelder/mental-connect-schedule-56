@@ -42,6 +42,7 @@ const VideoConsultation = () => {
   };
 
   const handleStartCall = () => {
+    console.log("Iniciando chamada...");
     setIsInCall(true);
   };
 
