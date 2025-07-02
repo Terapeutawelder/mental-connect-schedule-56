@@ -91,8 +91,16 @@ const FinalizarAgendamento = () => {
         description: "Confirmação enviada via WhatsApp com link de acesso.",
       });
 
-      // Redirecionar para página inicial com mensagem de sucesso
-      navigate('/?success=agendamento');
+      // Redirecionar para página de confirmação com os dados
+      const confirmationParams = new URLSearchParams({
+        name: formData.nome,
+        phone: formData.telefone,
+        professional: professionalId,
+        date: date,
+        time: time
+      });
+      
+      navigate(`/confirmacao-agendamento?${confirmationParams.toString()}`);
     } catch (error) {
       toast({
         title: "Erro no processamento",
