@@ -9,16 +9,163 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          created_at: string
+          duration_minutes: number
+          id: string
+          notes: string | null
+          patient_id: string
+          professional_id: string
+          scheduled_at: string
+          status: Database["public"]["Enums"]["appointment_status"]
+          updated_at: string
+          video_room_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          patient_id: string
+          professional_id: string
+          scheduled_at: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+          video_room_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          professional_id?: string
+          scheduled_at?: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+          video_room_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      professionals: {
+        Row: {
+          available_hours: Json | null
+          bio: string | null
+          created_at: string
+          crp: string | null
+          hourly_rate: number | null
+          id: string
+          profile_id: string
+          specialties: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          available_hours?: Json | null
+          bio?: string | null
+          created_at?: string
+          crp?: string | null
+          hourly_rate?: number | null
+          id?: string
+          profile_id: string
+          specialties?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          available_hours?: Json | null
+          bio?: string | null
+          created_at?: string
+          crp?: string | null
+          hourly_rate?: number | null
+          id?: string
+          profile_id?: string
+          specialties?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "professionals_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_professional: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      appointment_status:
+        | "scheduled"
+        | "confirmed"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      user_role: "patient" | "professional" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +280,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      appointment_status: [
+        "scheduled",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      user_role: ["patient", "professional", "admin"],
+    },
   },
 } as const

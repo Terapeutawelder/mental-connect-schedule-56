@@ -44,12 +44,12 @@ const Header = () => {
   };
 
   const handleLoginClick = () => {
-    navigate('/login');
+    navigate('/auth');
     setIsMenuOpen(false);
   };
 
   const handleProfissionaisClick = () => {
-    navigate('/login');
+    navigate('/auth');
     setIsMenuOpen(false);
   };
 
