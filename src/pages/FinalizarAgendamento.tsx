@@ -13,10 +13,7 @@ const FinalizarAgendamento = () => {
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
-    telefone: "",
-    cartao: "",
-    validade: "",
-    cvv: ""
+    telefone: ""
   });
   
   const professionalId = searchParams.get('professional') || '1';
@@ -114,94 +111,52 @@ const FinalizarAgendamento = () => {
             </CardHeader>
             
             <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                  <CardTitle className="flex items-center gap-2 mb-6">
-                    <User className="h-5 w-5" />
-                    Dados Pessoais
-                  </CardTitle>
+              <div className="max-w-lg mx-auto">
+                <CardTitle className="flex items-center gap-2 mb-6">
+                  <User className="h-5 w-5" />
+                  Dados Pessoais
+                </CardTitle>
+                
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="nome">Nome Completo</Label>
+                    <Input
+                      id="nome"
+                      value={formData.nome}
+                      onChange={(e) => handleInputChange('nome', e.target.value)}
+                      placeholder="Digite seu nome completo"
+                    />
+                  </div>
                   
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="nome">Nome Completo</Label>
-                      <Input
-                        id="nome"
-                        value={formData.nome}
-                        onChange={(e) => handleInputChange('nome', e.target.value)}
-                        placeholder="Digite seu nome completo"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        placeholder="seu@email.com"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="telefone">Telefone</Label>
-                      <Input
-                        id="telefone"
-                        value={formData.telefone}
-                        onChange={(e) => handleInputChange('telefone', e.target.value)}
-                        placeholder="(11) 99999-9999"
-                      />
-                    </div>
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="seu@email.com"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="telefone">Telefone</Label>
+                    <Input
+                      id="telefone"
+                      value={formData.telefone}
+                      onChange={(e) => handleInputChange('telefone', e.target.value)}
+                      placeholder="(11) 99999-9999"
+                    />
                   </div>
                 </div>
                 
-                <div>
-                  <CardTitle className="flex items-center gap-2 mb-6">
-                    <CreditCard className="h-5 w-5" />
-                    Dados de Pagamento
-                  </CardTitle>
-                  
-                  <div className="space-y-4">
+                <div className="bg-green-50 p-4 rounded-lg mt-6">
+                  <div className="flex justify-between items-center">
                     <div>
-                      <Label htmlFor="cartao">Número do Cartão</Label>
-                      <Input
-                        id="cartao"
-                        value={formData.cartao}
-                        onChange={(e) => handleInputChange('cartao', e.target.value)}
-                        placeholder="1234 5678 9012 3456"
-                      />
+                      <p className="text-green-800 font-semibold text-lg">Valor Total</p>
+                      <p className="text-green-600 text-sm">Pagamento via Mercado Pago</p>
                     </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="validade">Validade</Label>
-                        <Input
-                          id="validade"
-                          value={formData.validade}
-                          onChange={(e) => handleInputChange('validade', e.target.value)}
-                          placeholder="MM/AA"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="cvv">CVV</Label>
-                        <Input
-                          id="cvv"
-                          value={formData.cvv}
-                          onChange={(e) => handleInputChange('cvv', e.target.value)}
-                          placeholder="123"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="text-green-800 font-semibold text-lg">Valor Total</p>
-                          <p className="text-green-600 text-sm">Pagamento seguro</p>
-                        </div>
-                        <div className="text-green-600 font-bold text-2xl">R$ 37,90</div>
-                      </div>
-                    </div>
+                    <div className="text-green-600 font-bold text-2xl">R$ 37,90</div>
                   </div>
                 </div>
               </div>
@@ -210,7 +165,7 @@ const FinalizarAgendamento = () => {
                 onClick={handleFinalizarAgendamento}
                 className="w-full mt-8 bg-purple-600 hover:bg-purple-700 text-white text-lg py-6"
               >
-                Confirmar Pagamento e Finalizar Agendamento
+                Prosseguir para Pagamento
               </Button>
             </CardContent>
           </Card>
