@@ -1,15 +1,18 @@
 
-import { useState } from "react";
+import { useState, lazy, Suspense, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BookingFlow from "@/components/BookingFlow";
 import HeroSection from "@/components/sections/HeroSection";
-import OnlineTherapySection from "@/components/sections/OnlineTherapySection";
-import SearchSection from "@/components/sections/SearchSection";
-import ProfessionalsSection from "@/components/sections/ProfessionalsSection";
-import FeaturesSection from "@/components/sections/FeaturesSection";
-import CTASection from "@/components/sections/CTASection";
+import SectionSkeleton from "@/components/ui/section-skeleton";
+
+// Lazy load non-critical sections for better performance
+const BookingFlow = lazy(() => import("@/components/BookingFlow"));
+const OnlineTherapySection = lazy(() => import("@/components/sections/OnlineTherapySection"));
+const SearchSection = lazy(() => import("@/components/sections/SearchSection"));
+const ProfessionalsSection = lazy(() => import("@/components/sections/ProfessionalsSection"));
+const FeaturesSection = lazy(() => import("@/components/sections/FeaturesSection"));
+const CTASection = lazy(() => import("@/components/sections/CTASection"));
 
 interface Professional {
   id: number;
@@ -26,6 +29,17 @@ const Index = () => {
   const navigate = useNavigate();
   const [showBookingFlow, setShowBookingFlow] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
+  
+  // Preload components after initial render for better UX
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      import("@/components/sections/OnlineTherapySection");
+      import("@/components/sections/SearchSection");
+      import("@/components/sections/ProfessionalsSection");
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   const [professionals] = useState<Professional[]>([
     {
@@ -97,7 +111,15 @@ const Index = () => {
   };
 
   if (showBookingFlow && selectedProfessional) {
-    return <BookingFlow professional={selectedProfessional} onBack={handleBackFromBooking} />;
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+        </div>
+      }>
+        <BookingFlow professional={selectedProfessional} onBack={handleBackFromBooking} />
+      </Suspense>
+    );
   }
 
   return (
@@ -110,20 +132,30 @@ const Index = () => {
         onIniciarTeleconsultaClick={handleIniciarTeleconsulta}
       />
 
-      <OnlineTherapySection onAgendarConsultaClick={handleScrollToProfessionals} />
+      <Suspense fallback={<SectionSkeleton height="h-20" />}>
+        <OnlineTherapySection onAgendarConsultaClick={handleScrollToProfessionals} />
+      </Suspense>
 
-      <SearchSection />
+      <Suspense fallback={<SectionSkeleton height="h-32" />}>
+        <SearchSection />
+      </Suspense>
 
       <div className="bg-gradient-to-br from-purple-50 to-white">
-        <ProfessionalsSection 
-          professionals={professionals}
-          onBookProfessional={handleBookProfessional}
-          onCadastroClick={handleCadastroClick}
-        />
+        <Suspense fallback={<SectionSkeleton height="h-96" />}>
+          <ProfessionalsSection 
+            professionals={professionals}
+            onBookProfessional={handleBookProfessional}
+            onCadastroClick={handleCadastroClick}
+          />
+        </Suspense>
 
-        <FeaturesSection />
+        <Suspense fallback={<SectionSkeleton height="h-64" />}>
+          <FeaturesSection />
+        </Suspense>
 
-        <CTASection onAgendarConsultaClick={handleScrollToProfessionals} />
+        <Suspense fallback={<SectionSkeleton height="h-40" />}>
+          <CTASection onAgendarConsultaClick={handleScrollToProfessionals} />
+        </Suspense>
       </div>
 
       <Footer />
