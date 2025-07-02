@@ -2,6 +2,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { 
   Video, 
   VideoOff, 
@@ -11,7 +16,9 @@ import {
   PhoneOff,
   MessageSquare,
   Settings,
-  Monitor
+  Monitor,
+  Circle,
+  Square
 } from "lucide-react";
 
 interface VideoCallProps {
@@ -34,21 +41,42 @@ const VideoCall = ({
   const [callDuration, setCallDuration] = useState("00:00");
   const [messages, setMessages] = useState<Array<{id: number, sender: string, text: string, time: string}>>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(50);
+  const [videoQuality, setVideoQuality] = useState("HD");
+  const [showSettings, setShowSettings] = useState(false);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    if (localVideoRef.current && isVideoOn) {
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-          if (localVideoRef.current) {
-            localVideoRef.current.srcObject = stream;
-          }
-        })
-        .catch(err => console.log("Erro ao acessar câmera:", err));
-    }
-  }, [isVideoOn]);
+    navigator.mediaDevices.getUserMedia({ 
+      video: isVideoOn ? { width: 1280, height: 720 } : false, 
+      audio: { echoCancellation: true, noiseSuppression: true } 
+    })
+      .then(stream => {
+        streamRef.current = stream;
+        if (localVideoRef.current && isVideoOn) {
+          localVideoRef.current.srcObject = stream;
+        }
+        
+        // Configurar track de vídeo
+        const videoTrack = stream.getVideoTracks()[0];
+        if (videoTrack) {
+          videoTrack.enabled = isVideoOn;
+        }
+        
+        // Configurar track de áudio
+        const audioTrack = stream.getAudioTracks()[0];
+        if (audioTrack) {
+          audioTrack.enabled = isAudioOn;
+        }
+      })
+      .catch(err => console.log("Erro ao acessar câmera:", err));
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,8 +95,91 @@ const VideoCall = ({
   };
 
   const handleEndCall = () => {
+    if (isRecording) {
+      stopRecording();
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+    }
     setIsCallActive(false);
     onEndCall();
+  };
+
+  const toggleVideo = () => {
+    if (streamRef.current) {
+      const videoTrack = streamRef.current.getVideoTracks()[0];
+      if (videoTrack) {
+        videoTrack.enabled = !isVideoOn;
+        setIsVideoOn(!isVideoOn);
+        
+        if (localVideoRef.current) {
+          if (!isVideoOn) {
+            localVideoRef.current.srcObject = streamRef.current;
+          } else {
+            localVideoRef.current.srcObject = null;
+          }
+        }
+      }
+    }
+  };
+
+  const toggleAudio = () => {
+    if (streamRef.current) {
+      const audioTrack = streamRef.current.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = !isAudioOn;
+        setIsAudioOn(!isAudioOn);
+      }
+    }
+  };
+
+  const startRecording = () => {
+    if (streamRef.current && !isRecording) {
+      recordedChunksRef.current = [];
+      mediaRecorderRef.current = new MediaRecorder(streamRef.current);
+      
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+      
+      mediaRecorderRef.current.onstop = () => {
+        const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
+        saveRecording(blob);
+      };
+      
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const saveRecording = (blob: Blob) => {
+    const recording = {
+      id: Date.now().toString(),
+      patient: patientName,
+      professional: professionalName,
+      date: new Date().toLocaleDateString('pt-BR'),
+      time: new Date().toLocaleTimeString('pt-BR'),
+      duration: callDuration,
+      size: blob.size,
+      blob: blob
+    };
+    
+    // Salvar no localStorage para o admin
+    const recordings = JSON.parse(localStorage.getItem('consultation_recordings') || '[]');
+    recordings.push({
+      ...recording,
+      blobUrl: URL.createObjectURL(blob)
+    });
+    localStorage.setItem('consultation_recordings', JSON.stringify(recordings));
   };
 
   const handleSendMessage = () => {
@@ -94,9 +205,53 @@ const VideoCall = ({
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon" className="text-white hover:bg-gray-700">
-            <Settings className="h-5 w-5" />
-          </Button>
+          {isRecording && (
+            <div className="flex items-center space-x-2 bg-red-600 px-3 py-1 rounded-full">
+              <Circle className="h-3 w-3 fill-current animate-pulse" />
+              <span className="text-sm font-medium">Gravando</span>
+            </div>
+          )}
+          <Dialog open={showSettings} onOpenChange={setShowSettings}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-gray-700">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Configurações da Chamada</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="videoQuality">Qualidade do Vídeo</Label>
+                  <Select value={videoQuality} onValueChange={setVideoQuality}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="SD">SD (480p)</SelectItem>
+                      <SelectItem value="HD">HD (720p)</SelectItem>
+                      <SelectItem value="FHD">Full HD (1080p)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="audioLevel">Volume do Áudio: {audioLevel}%</Label>
+                  <Slider
+                    value={[audioLevel]}
+                    onValueChange={(value) => setAudioLevel(value[0])}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="autoRecord">Gravação Automática</Label>
+                  <Switch id="autoRecord" />
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -185,7 +340,7 @@ const VideoCall = ({
           <Button
             variant={isAudioOn ? "default" : "destructive"}
             size="icon"
-            onClick={() => setIsAudioOn(!isAudioOn)}
+            onClick={toggleAudio}
             className="rounded-full w-12 h-12"
           >
             {isAudioOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
@@ -194,7 +349,7 @@ const VideoCall = ({
           <Button
             variant={isVideoOn ? "default" : "destructive"}
             size="icon"
-            onClick={() => setIsVideoOn(!isVideoOn)}
+            onClick={toggleVideo}
             className="rounded-full w-12 h-12"
           >
             {isVideoOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
@@ -207,6 +362,15 @@ const VideoCall = ({
             className="rounded-full w-12 h-12 text-white hover:bg-gray-700"
           >
             <MessageSquare className="h-5 w-5" />
+          </Button>
+
+          <Button
+            variant={isRecording ? "destructive" : "default"}
+            size="icon"
+            onClick={isRecording ? stopRecording : startRecording}
+            className="rounded-full w-12 h-12"
+          >
+            {isRecording ? <Square className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
           </Button>
 
           <Button

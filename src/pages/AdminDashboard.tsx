@@ -10,6 +10,7 @@ import AdminProfessionals from "@/components/admin/AdminProfessionals";
 import AdminPatients from "@/components/admin/AdminPatients";
 import AdminAppointments from "@/components/admin/AdminAppointments";
 import AdminReports from "@/components/admin/AdminReports";
+import AdminRecordings from "@/components/admin/AdminRecordings";
 import WhatsAppNotifications from "@/components/whatsapp/WhatsAppNotifications";
 
 const AdminDashboard = () => {
@@ -93,11 +94,12 @@ const AdminDashboard = () => {
 
         {/* Main Tabs */}
         <Tabs defaultValue="reports" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="reports">Relatórios</TabsTrigger>
             <TabsTrigger value="professionals">Profissionais</TabsTrigger>
             <TabsTrigger value="patients">Pacientes</TabsTrigger>
             <TabsTrigger value="appointments">Consultas</TabsTrigger>
+            <TabsTrigger value="recordings">Gravações</TabsTrigger>
             <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
           </TabsList>
 
@@ -115,6 +117,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="appointments">
             <AdminAppointments />
+          </TabsContent>
+
+          <TabsContent value="recordings">
+            <AdminRecordings />
           </TabsContent>
 
           <TabsContent value="whatsapp">
