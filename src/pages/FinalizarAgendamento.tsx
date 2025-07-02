@@ -91,7 +91,8 @@ const FinalizarAgendamento = () => {
         description: "Confirmação enviada via WhatsApp com link de acesso.",
       });
 
-      navigate('/video-consulta?success=true');
+      // Redirecionar para página inicial com mensagem de sucesso
+      navigate('/?success=agendamento');
     } catch (error) {
       toast({
         title: "Erro no processamento",
