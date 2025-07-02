@@ -80,19 +80,13 @@ export const useVideoCall = ({ callStartTime, patientName, professionalName, onE
   };
 
   const toggleVideo = () => {
+    const newVideoState = !isVideoOn;
+    setIsVideoOn(newVideoState);
+    
     if (streamRef.current) {
       const videoTrack = streamRef.current.getVideoTracks()[0];
       if (videoTrack) {
-        videoTrack.enabled = !isVideoOn;
-        setIsVideoOn(!isVideoOn);
-        
-        if (localVideoRef.current) {
-          if (!isVideoOn) {
-            localVideoRef.current.srcObject = streamRef.current;
-          } else {
-            localVideoRef.current.srcObject = null;
-          }
-        }
+        videoTrack.enabled = newVideoState;
       }
     }
   };
