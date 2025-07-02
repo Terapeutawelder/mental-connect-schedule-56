@@ -1,0 +1,165 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14
+    container_name: conexaomental_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: conexaomental
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123!@#
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrate-to-contabo.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backups:/backups
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d conexaomental"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis para cache e sessões (opcional)
+  redis:
+    image: redis:7-alpine
+    container_name: conexaomental_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass "redis123!@#"
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Aplicação React (para build de produção)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: conexaomental_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres123!@#@postgres:5432/conexaomental
+      - REDIS_URL=redis://:redis123!@#@redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - ./logs:/app/logs
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: conexaomental_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  # Backup automático
+  backup:
+    image: postgres:14
+    container_name: conexaomental_backup
+    restart: "no"
+    environment:
+      PGPASSWORD: postgres123!@#
+    volumes:
+      - ./backups:/backups
+      - ./backup-db.sh:/backup-db.sh:ro
+    command: /bin/bash /backup-db.sh
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    profiles:
+      - backup
+
+  # Monitoramento (opcional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: conexaomental_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - app-network
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: conexaomental_grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123!@#
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - app-network
+    profiles:
+      - monitoring
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  nginx_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+
+# Comandos úteis:
+# docker-compose up -d                    # Iniciar serviços principais
+# docker-compose --profile backup run backup  # Executar backup manual
+# docker-compose --profile monitoring up -d   # Iniciar com monitoramento
+# docker-compose logs -f app              # Ver logs da aplicação
+# docker-compose exec postgres psql -U postgres -d conexaomental  # Acessar banco
