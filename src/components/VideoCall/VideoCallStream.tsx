@@ -22,8 +22,8 @@ export const VideoCallStream = ({
     <div className="flex-1 relative bg-gray-900">
       <div className="w-full h-full relative">
         {isCallActive ? (
-          <div className="w-full h-full bg-gray-900">
-            {/* Área principal da consulta - sem interface visual */}
+          <div className="w-full h-full bg-black">
+            {/* Tela preta limpa durante a consulta */}
           </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-800">
