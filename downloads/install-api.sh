@@ -73,25 +73,7 @@ log_info "Chave JWT gerada e configurada."
 
 # 6. Configurar PM2
 log_step "Configurando PM2..."
-cat > ecosystem.config.js << 'EOF'
-module.exports = {
-  apps: [{
-    name: 'conexao-mental-api',
-    script: 'server.js',
-    instances: 1,
-    autorestart: true,
-    watch: false,
-    max_memory_restart: '1G',
-    env: {
-      NODE_ENV: 'production',
-      PORT: 3001
-    },
-    error_file: '/var/log/pm2/conexao-mental-api-error.log',
-    out_file: '/var/log/pm2/conexao-mental-api-out.log',
-    log_file: '/var/log/pm2/conexao-mental-api-combined.log'
-  }]
-};
-EOF
+# O arquivo ecosystem.config.js já deve estar presente
 
 # 7. Criar diretório de logs
 mkdir -p /var/log/pm2
@@ -108,52 +90,7 @@ pm2 startup
 
 # 10. Configurar Nginx
 log_step "Configurando Nginx..."
-cat > /etc/nginx/sites-available/conexaomental << 'EOF'
-server {
-    listen 80;
-    server_name clinicaconexaomental.online www.clinicaconexaomental.online;
-    
-    # Frontend (React)
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-    
-    # API Backend
-    location /api/ {
-        proxy_pass http://localhost:3001/api/;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        
-        # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://clinicaconexaomental.online' always;
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
-        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
-        add_header 'Access-Control-Allow-Credentials' 'true' always;
-        
-        # Handle preflight requests
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://clinicaconexaomental.online' always;
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
-            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
-            add_header 'Access-Control-Max-Age' 1728000;
-            add_header 'Content-Type' 'text/plain charset=UTF-8';
-            add_header 'Content-Length' 0;
-            return 204;
-        }
-    }
-}
-EOF
+cp nginx-site.conf /etc/nginx/sites-available/conexaomental
 
 # Ativar site
 ln -sf /etc/nginx/sites-available/conexaomental /etc/nginx/sites-enabled/
