@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "@/assets/logo-new.png";
+const logo = "/lovable-uploads/e24263e0-8b4c-43e9-a547-e4ec838ddd03.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";

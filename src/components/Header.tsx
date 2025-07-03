@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Menu, X, UserPlus, Video } from "lucide-react";
 import { useState } from "react";
-import logo from "@/assets/logo-new.png";
+const logo = "/lovable-uploads/e24263e0-8b4c-43e9-a547-e4ec838ddd03.png";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
