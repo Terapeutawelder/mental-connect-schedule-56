@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logo from "@/assets/logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -200,10 +201,10 @@ const Auth = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-xl">CM</span>
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
+              <h1 className="text-3xl font-bold gradient-text">Clínica Conexão Mental</h1>
             </div>
-            <h1 className="text-3xl font-bold gradient-text mb-2">Clínica Conexão Mental</h1>
             <p className="text-muted-foreground">Recuperar senha</p>
           </div>
 
@@ -254,10 +255,10 @@ const Auth = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-xl">CM</span>
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
+            <h1 className="text-3xl font-bold gradient-text">Clínica Conexão Mental</h1>
           </div>
-          <h1 className="text-3xl font-bold gradient-text mb-2">Clínica Conexão Mental</h1>
           <p className="text-muted-foreground">Acesse sua conta ou cadastre-se</p>
         </div>
 

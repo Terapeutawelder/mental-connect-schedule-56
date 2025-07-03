@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Menu, X, UserPlus, Video } from "lucide-react";
 import { useState } from "react";
+import logo from "@/assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -62,9 +63,7 @@ const Header = () => {
             className="flex items-center space-x-2 cursor-pointer"
             onClick={() => navigate('/')}
           >
-            <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CM</span>
-            </div>
+            <img src={logo} alt="Clínica Conexão Mental" className="w-10 h-10" />
             <span className="font-bold text-xl gradient-text">Clínica Conexão Mental</span>
           </div>
 

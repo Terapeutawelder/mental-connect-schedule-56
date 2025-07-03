@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Mail, MapPin, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -24,7 +25,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Informações da Clínica */}
           <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold mb-4">Clínica Conexão Mental</h3>
+            <div className="flex items-center justify-center md:justify-start space-x-3 mb-4">
+              <img src={logo} alt="Clínica Conexão Mental" className="w-10 h-10" />
+              <h3 className="text-xl font-bold">Clínica Conexão Mental</h3>
+            </div>
             <div className="space-y-2 text-purple-100">
               <div className="flex items-start gap-2 justify-center md:justify-start">
                 <MapPin className="h-4 w-4 mt-1 flex-shrink-0" />
