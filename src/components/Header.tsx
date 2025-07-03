@@ -60,10 +60,10 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div 
-            className="flex items-center gap-1 cursor-pointer"
+            className="flex items-center cursor-pointer"
             onClick={() => navigate('/')}
           >
-            <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
+            <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12 mr-1" />
             <span className="font-bold text-xl gradient-text">Clínica Conexão Mental</span>
           </div>
 
