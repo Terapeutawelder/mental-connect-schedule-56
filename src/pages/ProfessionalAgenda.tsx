@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Share2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import ReferralSection from "@/components/ReferralSection";
+
 import AgendaSummary from "@/components/AgendaSummary";
 import AppointmentsSection from "@/components/AppointmentsSection";
 import { getAppointmentsByProfessional } from "@/utils/appointmentStorage";
@@ -67,7 +67,7 @@ const ProfessionalAgenda = () => {
               <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">CM</span>
               </div>
-              <span className="font-bold text-xl gradient-text">Conexão Mental</span>
+              <span className="font-bold text-xl gradient-text">Clínica Conexão Mental</span>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="ghost" onClick={() => navigate('/afiliados')}>
@@ -89,9 +89,6 @@ const ProfessionalAgenda = () => {
           <h1 className="text-3xl font-bold gradient-text mb-2">Minha Agenda</h1>
           <p className="text-muted-foreground">Gerencie seus agendamentos e consultas</p>
         </div>
-
-        {/* Seção de Indicação */}
-        <ReferralSection />
 
         {/* Resumo da Agenda */}
         <AgendaSummary 

@@ -24,7 +24,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Informações da Clínica */}
           <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold mb-4">Conexão Mental</h3>
+            <h3 className="text-xl font-bold mb-4">Clínica Conexão Mental</h3>
             <div className="space-y-2 text-purple-100">
               <div className="flex items-start gap-2 justify-center md:justify-start">
                 <MapPin className="h-4 w-4 mt-1 flex-shrink-0" />

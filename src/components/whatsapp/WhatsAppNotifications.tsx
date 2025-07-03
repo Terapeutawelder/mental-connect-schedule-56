@@ -123,7 +123,7 @@ const WhatsAppNotifications = () => {
 
     try {
       for (const appointment of upcomingAppointments) {
-        const reminderMessage = `Olá ${appointment.name}! Lembramos que sua consulta está agendada para amanhã às ${appointment.time}. Conexão Mental.`;
+        const reminderMessage = `Olá ${appointment.name}! Lembramos que sua consulta está agendada para amanhã às ${appointment.time}. Clínica Conexão Mental.`;
         
         await fetch(apiUrl, {
           method: 'POST',

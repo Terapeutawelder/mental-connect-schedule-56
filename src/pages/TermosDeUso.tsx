@@ -37,7 +37,7 @@ const TermosDeUso = () => {
               <section>
                 <h3 className="text-lg font-semibold mb-3">1. ACEITAÇÃO DOS TERMOS</h3>
                 <p>
-                  Ao acessar e usar a plataforma Conexão Mental, você concorda em cumprir e 
+                  Ao acessar e usar a plataforma Clínica Conexão Mental, você concorda em cumprir e 
                   ficar vinculado aos termos e condições de uso descritos neste documento.
                 </p>
               </section>
@@ -45,7 +45,7 @@ const TermosDeUso = () => {
               <section>
                 <h3 className="text-lg font-semibold mb-3">2. DESCRIÇÃO DO SERVIÇO</h3>
                 <p>
-                  A Conexão Mental é uma plataforma digital que conecta pacientes a profissionais 
+                  A Clínica Conexão Mental é uma plataforma digital que conecta pacientes a profissionais 
                   de saúde mental qualificados para consultas online e presenciais.
                 </p>
               </section>
@@ -92,7 +92,7 @@ const TermosDeUso = () => {
               <section>
                 <h3 className="text-lg font-semibold mb-3">7. LIMITAÇÃO DE RESPONSABILIDADE</h3>
                 <p>
-                  A Conexão Mental atua como intermediária entre pacientes e profissionais. 
+                  A Clínica Conexão Mental atua como intermediária entre pacientes e profissionais. 
                   Não nos responsabilizamos pelo conteúdo das consultas ou resultados dos tratamentos.
                 </p>
               </section>

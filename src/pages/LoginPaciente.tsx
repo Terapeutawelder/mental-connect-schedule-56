@@ -64,7 +64,7 @@ const LoginPaciente = () => {
             <div className="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-white font-bold text-xl">CM</span>
             </div>
-            <h1 className="text-3xl font-bold gradient-text mb-2">Conexão Mental</h1>
+            <h1 className="text-3xl font-bold gradient-text mb-2">Clínica Conexão Mental</h1>
             <p className="text-muted-foreground">Recuperar senha</p>
           </div>
 
@@ -117,7 +117,7 @@ const LoginPaciente = () => {
           <div className="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-white font-bold text-xl">CM</span>
           </div>
-          <h1 className="text-3xl font-bold gradient-text mb-2">Conexão Mental</h1>
+          <h1 className="text-3xl font-bold gradient-text mb-2">Clínica Conexão Mental</h1>
           <p className="text-muted-foreground">Acesse sua teleconsulta</p>
         </div>
 

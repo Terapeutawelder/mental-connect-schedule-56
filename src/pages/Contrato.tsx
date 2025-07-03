@@ -51,7 +51,7 @@ const Contrato = () => {
                 <h3 className="text-lg font-semibold mb-3">2. OBJETO DO CONTRATO</h3>
                 <p>
                   O presente contrato tem por objeto a prestação de serviços profissionais de saúde mental 
-                  através da plataforma digital da Conexão Mental, incluindo consultas online e presenciais.
+                  através da plataforma digital da Clínica Conexão Mental, incluindo consultas online e presenciais.
                 </p>
               </section>
 

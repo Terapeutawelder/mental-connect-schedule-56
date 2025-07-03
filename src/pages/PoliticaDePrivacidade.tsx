@@ -37,7 +37,7 @@ const PoliticaDePrivacidade = () => {
               <section>
                 <h3 className="text-lg font-semibold mb-3">1. INFORMAÇÕES GERAIS</h3>
                 <p>
-                  Esta Política de Privacidade descreve como a Clínica Conexão Mental coleta, 
+                  Esta Política de Privacidade descreve como a Clínica Conexão Mental coleta,
                   usa, armazena e protege suas informações pessoais, em conformidade com a 
                   Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018).
                 </p>

@@ -65,7 +65,7 @@ export const useWhatsAppNotifications = () => {
   };
 
   const sendAppointmentConfirmation = async (patientName: string, phone: string, date: string, time: string) => {
-    const message = `Olá ${patientName}! Sua consulta foi confirmada para ${date} às ${time}. Conexão Mental - Plataforma de Saúde Mental.`;
+    const message = `Olá ${patientName}! Sua consulta foi confirmada para ${date} às ${time}. Clínica Conexão Mental - Plataforma de Saúde Mental.`;
     
     return await sendNotification({
       phone,
@@ -76,7 +76,7 @@ export const useWhatsAppNotifications = () => {
   };
 
   const sendAppointmentReminder = async (patientName: string, phone: string, date: string, time: string) => {
-    const message = `Olá ${patientName}! Lembramos que sua consulta está agendada para ${date} às ${time}. Não esqueça! Conexão Mental.`;
+    const message = `Olá ${patientName}! Lembramos que sua consulta está agendada para ${date} às ${time}. Não esqueça! Clínica Conexão Mental.`;
     
     return await sendNotification({
       phone,
@@ -87,7 +87,7 @@ export const useWhatsAppNotifications = () => {
   };
 
   const sendAppointmentCancellation = async (patientName: string, phone: string, reason?: string) => {
-    const message = `Olá ${patientName}! Infelizmente sua consulta foi cancelada${reason ? `: ${reason}` : '.'}. Entre em contato para reagendar. Conexão Mental.`;
+    const message = `Olá ${patientName}! Infelizmente sua consulta foi cancelada${reason ? `: ${reason}` : '.'}. Entre em contato para reagendar. Clínica Conexão Mental.`;
     
     return await sendNotification({
       phone,

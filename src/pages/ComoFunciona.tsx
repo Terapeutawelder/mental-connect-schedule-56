@@ -112,7 +112,7 @@ const ComoFunciona = () => {
         {/* Benefícios */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-center gradient-text mb-8">
-            Por que escolher a Conexão Mental?
+            Por que escolher a Clínica Conexão Mental?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {benefits.map((benefit, index) => (

@@ -65,7 +65,7 @@ const Header = () => {
             <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CM</span>
             </div>
-            <span className="font-bold text-xl gradient-text">Conexão Mental</span>
+            <span className="font-bold text-xl gradient-text">Clínica Conexão Mental</span>
           </div>
 
           {/* Desktop Navigation */}

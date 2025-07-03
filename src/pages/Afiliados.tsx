@@ -40,7 +40,7 @@ const Afiliados = () => {
     {
       icon: Award,
       title: "Reconhecimento",
-      description: "Seja reconhecido como um parceiro oficial da Conexão Mental."
+      description: "Seja reconhecido como um parceiro oficial da Clínica Conexão Mental."
     }
   ];
 
