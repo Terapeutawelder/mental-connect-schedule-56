@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Mail, MapPin, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/logo-transparent.png";
+import logo from "@/assets/logo-new.png";
 
 const Footer = () => {
   const navigate = useNavigate();

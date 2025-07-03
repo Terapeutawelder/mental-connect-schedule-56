@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, Menu, X, UserPlus, Video } from "lucide-react";
 import { useState } from "react";
-import logo from "@/assets/logo-transparent.png";
+import logo from "@/assets/logo-new.png";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
