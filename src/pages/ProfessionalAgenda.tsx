@@ -65,7 +65,7 @@ const ProfessionalAgenda = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <img src={logo} alt="Clínica Conexão Mental" className="w-10 h-10" />
+              <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
               <span className="font-bold text-xl gradient-text">Clínica Conexão Mental</span>
             </div>
             <div className="flex items-center space-x-4">

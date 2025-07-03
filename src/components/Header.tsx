@@ -63,7 +63,7 @@ const Header = () => {
             className="flex items-center space-x-2 cursor-pointer"
             onClick={() => navigate('/')}
           >
-            <img src={logo} alt="Clínica Conexão Mental" className="w-10 h-10" />
+            <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
             <span className="font-bold text-xl gradient-text">Clínica Conexão Mental</span>
           </div>
 

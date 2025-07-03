@@ -26,7 +26,7 @@ const Footer = () => {
           {/* Informações da Clínica */}
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start space-x-3 mb-4">
-              <img src={logo} alt="Clínica Conexão Mental" className="w-10 h-10" />
+              <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
               <h3 className="text-xl font-bold">Clínica Conexão Mental</h3>
             </div>
             <div className="space-y-2 text-purple-100">

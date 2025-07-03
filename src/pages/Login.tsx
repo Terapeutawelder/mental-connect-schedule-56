@@ -91,11 +91,11 @@ const Login = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
+          <div className="text-center mb-4">
+            <img src={logo} alt="Clínica Conexão Mental" className="w-16 h-16 mx-auto mb-4" />
             <h1 className="text-3xl font-bold gradient-text">Clínica Conexão Mental</h1>
           </div>
-          <p className="text-muted-foreground">Recuperar senha</p>
+          <p className="text-muted-foreground text-center">Recuperar senha</p>
           </div>
 
           <Card>
@@ -144,11 +144,11 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
+          <div className="text-center mb-4">
+            <img src={logo} alt="Clínica Conexão Mental" className="w-16 h-16 mx-auto mb-4" />
             <h1 className="text-3xl font-bold gradient-text">Clínica Conexão Mental</h1>
           </div>
-          <p className="text-muted-foreground">Entre em sua conta</p>
+          <p className="text-muted-foreground text-center">Entre em sua conta</p>
         </div>
 
         <Card>
