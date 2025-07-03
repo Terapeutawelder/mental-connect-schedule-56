@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-transparent.png";
 import { Button } from "@/components/ui/button";
 import { Share2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
