@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # API Backend Node.js
+  api:
+    image: node:18-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.api.rule=Host(`clinicaconexaomental.online`) && PathPrefix(`/api`)
+        - traefik.http.services.api.loadbalancer.server.port=3001
+        - traefik.docker.network=traefik_default
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=conexaomental
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123!@#
+      - JWT_SECRET=sua_chave_secreta_super_segura_conexao_mental_2024
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm start"
+    networks:
+      - traefik_default
+      - postgres_network
+      - redis_network
+
+  # Frontend React
+  frontend:
+    image: node:18-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.frontend.rule=Host(`clinicaconexaomental.online`)
+        - traefik.http.services.frontend.loadbalancer.server.port=3000
+        - traefik.docker.network=traefik_default
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm run build && npm run preview -- --host 0.0.0.0"
+    networks:
+      - traefik_default
+
+networks:
+  traefik_default:
+    external: true
+  postgres_network:
+    external: true
+  redis_network:
+    external: true
+
+# Deploy via Portainer:
+# 1. Copie este arquivo para o servidor
+# 2. No Portainer > Stacks > Add Stack
+# 3. Cole o conteúdo e clique em Deploy

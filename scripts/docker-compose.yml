@@ -1,47 +1,34 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:14
-    container_name: conexaomental_db
+  # API Backend Node.js
+  api:
+    image: node:18-alpine
+    container_name: conexaomental_api
     restart: unless-stopped
+    working_dir: /app
     environment:
-      POSTGRES_DB: conexaomental
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123!@#
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - NODE_ENV=production
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=conexaomental
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123!@#
+      - JWT_SECRET=sua_chave_secreta_super_segura_conexao_mental_2024
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./migrate-to-contabo.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./backups:/backups
+      - ./api:/app
+      - /app/node_modules
     ports:
-      - "5432:5432"
+      - "3001:3001"
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d conexaomental"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
-  # Redis para cache e sessões (opcional)
-  redis:
-    image: redis:7-alpine
-    container_name: conexaomental_redis
-    restart: unless-stopped
-    command: redis-server --appendonly yes --requirepass "redis123!@#"
-    volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      - postgres_network  # Conecta à rede do PostgreSQL existente
+      - redis_network     # Conecta à rede do Redis existente
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - postgres
+      - redis
 
   # Aplicação React (para build de produção)
   app:
