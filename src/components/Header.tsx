@@ -60,7 +60,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div 
-            className="flex items-center space-x-2 cursor-pointer"
+            className="flex items-center space-x-1 cursor-pointer"
             onClick={() => navigate('/')}
           >
             <img src={logo} alt="Clínica Conexão Mental" className="w-12 h-12" />
