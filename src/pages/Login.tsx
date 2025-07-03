@@ -92,7 +92,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
           <div className="text-center mb-4">
-            <img src={logo} alt="Clínica Conexão Mental" className="w-16 h-16 mx-auto mb-4" />
+            <img src={logo} alt="Clínica Conexão Mental" className="w-20 h-20 mx-auto mb-4" />
             <h1 className="text-3xl font-bold gradient-text">Clínica Conexão Mental</h1>
           </div>
           <p className="text-muted-foreground text-center">Recuperar senha</p>
@@ -145,7 +145,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-center mb-4">
-            <img src={logo} alt="Clínica Conexão Mental" className="w-16 h-16 mx-auto mb-4" />
+            <img src={logo} alt="Clínica Conexão Mental" className="w-20 h-20 mx-auto mb-4" />
             <h1 className="text-3xl font-bold gradient-text">Clínica Conexão Mental</h1>
           </div>
           <p className="text-muted-foreground text-center">Entre em sua conta</p>
