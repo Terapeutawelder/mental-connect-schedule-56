@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-const logo = "/lovable-uploads/e24263e0-8b4c-43e9-a547-e4ec838ddd03.png";
+const logo = "/lovable-uploads/1c4653a3-9aa5-49a8-8b1a-7e182d51255e.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
