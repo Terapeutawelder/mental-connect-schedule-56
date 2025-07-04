@@ -197,7 +197,7 @@ echo "4️⃣ Configurando Nginx..."
 cat > /etc/nginx/sites-available/conexaomental << 'EOF'
 server {
     listen 80;
-    server_name 157.173.120.220 clinicaconexaomental.online;
+    server_name 157.173.120.220 conexaomental.online www.conexaomental.online;
     
     location / {
         root /opt/conexaomental/frontend/dist;
@@ -296,8 +296,8 @@ chmod +x /usr/local/bin/conexao-status
 echo ""
 echo "🎉 INSTALAÇÃO CONCLUÍDA COM SUCESSO!"
 echo "======================================"
-echo "🌐 Site: http://157.173.120.220"
-echo "🔧 API: http://157.173.120.220/api/health"
+echo "🌐 Site: https://conexaomental.online"
+echo "🔧 API: https://conexaomental.online/api/health"
 echo "📊 Status: conexao-status"
 echo ""
 echo "📋 CREDENCIAIS:"
@@ -332,4 +332,4 @@ else
 fi
 
 echo ""
-echo "✨ Instalação finalizada! Acesse: http://157.173.120.220"
+echo "✨ Instalação finalizada! Acesse: https://conexaomental.online"
