@@ -43,7 +43,7 @@ pm2 status
 curl http://localhost:3001/api/health
 
 # 3. Testar API externamente
-curl https://clinicaconexaomental.online/api/health
+curl https://conexaomental.online/api/health
 
 # 4. Status do Nginx
 systemctl status nginx
@@ -103,7 +103,7 @@ apt update
 apt install certbot python3-certbot-nginx
 
 # 2. Obter certificado SSL
-certbot --nginx -d clinicaconexaomental.online -d www.clinicaconexaomental.online
+certbot --nginx -d conexaomental.online -d www.conexaomental.online
 
 # 3. Testar renovação automática
 certbot renew --dry-run
@@ -119,29 +119,27 @@ certbot certificates
 ### Testar endpoints principais
 ```bash
 # 1. Health Check
-curl https://clinicaconexaomental.online/api/health
+curl https://conexaomental.online/api/health
 
 # 2. Teste de cadastro
-curl -X POST https://clinicaconexaomental.online/api/auth/signup \
+curl -X POST https://conexaomental.online/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@clinica.com",
-    "password": "admin123",
-    "full_name": "Administrador",
-    "role": "admin"
+    "email": "test@test.com",
+    "password": "123456",
+    "full_name": "Teste User"
   }'
 
 # 3. Teste de login
-curl -X POST https://clinicaconexaomental.online/api/auth/signin \
+curl -X POST https://conexaomental.online/api/auth/signin \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@clinica.com",
-    "password": "admin123"
+    "email": "test@test.com",
+    "password": "123456"
   }'
 
-# 4. Teste com token (substitua TOKEN_AQUI pelo token recebido no login)
 curl -H "Authorization: Bearer TOKEN_AQUI" \
-     https://clinicaconexaomental.online/api/auth/me
+     https://conexaomental.online/api/auth/me
 ```
 
 ---
@@ -250,10 +248,10 @@ systemctl status postgresql
 cat /etc/nginx/sites-available/conexaomental | grep -A 10 "CORS"
 
 # 2. Testar CORS
-curl -H "Origin: https://clinicaconexaomental.online" \
+curl -H "Origin: https://conexaomental.online" \
      -H "Access-Control-Request-Method: POST" \
      -X OPTIONS \
-     https://clinicaconexaomental.online/api/auth/signin
+     https://conexaomental.online/api/auth/signin
 
 # 3. Verificar logs do navegador (F12 > Console)
 ```
@@ -302,8 +300,8 @@ Marque conforme for completando:
 
 ## 📞 Informações de Contato
 
-- **API URL**: https://clinicaconexaomental.online/api
-- **Health Check**: https://clinicaconexaomental.online/api/health
+- **API URL**: https://conexaomental.online/api
+- **Health Check**: https://conexaomental.online/api/health
 - **Servidor**: 157.173.120.220
 - **Porta API**: 3001
 - **Banco**: PostgreSQL (conexaomental)

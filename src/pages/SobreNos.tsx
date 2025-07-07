@@ -88,10 +88,10 @@ const SobreNos = () => {
                   <div>
                     <p className="font-medium">Email</p>
                     <a 
-                      href="mailto:contato@clinicaconexaomental.online" 
+                      href="mailto:contato@conexaomental.online" 
                       className="text-blue-600 hover:underline"
                     >
-                      contato@clinicaconexaomental.online
+                      contato@conexaomental.online
                     </a>
                   </div>
                 </div>

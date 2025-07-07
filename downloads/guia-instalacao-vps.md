@@ -184,7 +184,7 @@ systemctl start nginx
 cat > /etc/nginx/sites-available/conexaomental << 'NGINXEOF'
 server {
     listen 80;
-    server_name 157.173.120.220 clinicaconexaomental.online www.clinicaconexaomental.online;
+    server_name 157.173.120.220 conexaomental.online www.conexaomental.online;
     
     # Frontend (React)
     location / {
@@ -263,7 +263,7 @@ echo ""
 echo "=== PRÓXIMOS PASSOS ==="
 echo "1. Execute: bash install-api.sh"
 echo "2. Execute: bash install-frontend.sh"
-echo "3. Configure SSL: certbot --nginx -d clinicaconexaomental.online"
+echo "3. Configure SSL: certbot --nginx -d conexaomental.online"
 echo "4. Para verificar status: conexao-status"
 echo ""
 log_warn "Guarde bem a senha do PostgreSQL!"
@@ -467,7 +467,7 @@ const pool = new Pool({
 // Middlewares
 app.use(helmet());
 app.use(cors({
-  origin: ['http://157.173.120.220', 'https://clinicaconexaomental.online', 'http://localhost:5173'],
+  origin: ['http://157.173.120.220', 'https://conexaomental.online', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -932,7 +932,7 @@ curl http://157.173.120.220
 ### 4.1 Configurar SSL (Opcional)
 ```bash
 # Se você tem um domínio configurado
-certbot --nginx -d clinicaconexaomental.online
+certbot --nginx -d conexaomental.online
 ```
 
 ### 4.2 Configurar backup automático

@@ -47,7 +47,7 @@ chmod +x install-api.sh
 
 ## 🧪 Teste final
 ```bash
-curl https://clinicaconexaomental.online/api/health
+curl https://conexaomental.online/api/health
 ```
 
 **🎉 Pronto! Sua API estará funcionando!**

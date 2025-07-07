@@ -39,7 +39,7 @@ const loginLimiter = rateLimit({
 
 // CORS configurado para o domínio
 app.use(cors({
-  origin: ['https://clinicaconexaomental.online', 'http://localhost:3000'],
+  origin: ['https://conexaomental.online', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

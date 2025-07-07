@@ -78,7 +78,7 @@ Adicione a configuração da API:
 ```nginx
 server {
     listen 80;
-    server_name clinicaconexaomental.online www.clinicaconexaomental.online;
+    server_name conexaomental.online www.conexaomental.online;
     
     # Frontend (React)
     location / {
@@ -103,14 +103,14 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         
         # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://clinicaconexaomental.online' always;
+        add_header 'Access-Control-Allow-Origin' 'https://conexaomental.online' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
         add_header 'Access-Control-Allow-Credentials' 'true' always;
         
         # Handle preflight requests
         if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://clinicaconexaomental.online' always;
+            add_header 'Access-Control-Allow-Origin' 'https://conexaomental.online' always;
             add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
             add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
             add_header 'Access-Control-Max-Age' 1728000;
@@ -136,7 +136,7 @@ ufw allow 3001
 ## 🔧 Configuração SSL (Opcional)
 ```bash
 # Instalar certificado SSL
-certbot --nginx -d clinicaconexaomental.online -d www.clinicaconexaomental.online
+certbot --nginx -d conexaomental.online -d www.conexaomental.online
 ```
 
 ## 📊 Monitoramento
@@ -150,10 +150,10 @@ pm2 logs conexao-mental-api
 ### Testar endpoints
 ```bash
 # Health check
-curl https://clinicaconexaomental.online/api/health
+curl https://conexaomental.online/api/health
 
 # Teste de registro
-curl -X POST https://clinicaconexaomental.online/api/auth/signup \
+curl -X POST https://conexaomental.online/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"email":"teste@teste.com","password":"123456","full_name":"Teste Usuario"}'
 ```

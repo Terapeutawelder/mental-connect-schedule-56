@@ -48,10 +48,10 @@ const Footer = () => {
               <div className="flex items-center gap-3 justify-center md:justify-start">
                 <Mail className="h-5 w-5 text-blue-200" />
                 <a 
-                  href="mailto:contato@clinicaconexaomental.online" 
+                  href="mailto:contato@conexaomental.online" 
                   className="text-purple-100 hover:text-white transition-colors"
                 >
-                  contato@clinicaconexaomental.online
+                  contato@conexaomental.online
                 </a>
               </div>
               <div className="flex items-center gap-3 justify-center md:justify-start">

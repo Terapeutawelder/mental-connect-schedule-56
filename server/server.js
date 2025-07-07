@@ -22,7 +22,7 @@ const pool = new Pool({
 // Middlewares
 app.use(helmet());
 app.use(cors({
-  origin: ['https://clinicaconexaomental.online', 'http://localhost:5173'],
+  origin: ['https://conexaomental.online', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
