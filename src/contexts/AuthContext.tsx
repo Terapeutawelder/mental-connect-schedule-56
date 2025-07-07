@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const API_BASE_URL = 'https://clinicaconexaomental.online/api';
+  const API_BASE_URL = 'https://conexaomental.online/api';
 
   const getAuthToken = () => localStorage.getItem('auth_token');
   

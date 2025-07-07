@@ -21,7 +21,7 @@ const ConfirmacaoAgendamento = () => {
   
   // Gerar link de acesso único
   const [accessLink] = useState(() => 
-    `https://teleconsulta.conexaomental.com/sala/${professionalId}-${Date.now()}`
+    `https://conexaomental.online/video-consulta?sala=${professionalId}-${Date.now()}`
   );
 
   // Salvar agendamento quando a página carregar

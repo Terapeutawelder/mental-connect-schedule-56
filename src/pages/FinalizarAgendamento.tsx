@@ -60,7 +60,7 @@ const FinalizarAgendamento = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Gerar link de acesso único para a teleconsulta
-      const accessLink = `https://teleconsulta.conexaomental.com/sala/${professionalId}-${Date.now()}`;
+      const accessLink = `https://conexaomental.online/video-consulta?sala=${professionalId}-${Date.now()}`;
 
       // Enviar confirmação via WhatsApp com link de acesso
       const whatsappSent = await sendAppointmentConfirmation(
