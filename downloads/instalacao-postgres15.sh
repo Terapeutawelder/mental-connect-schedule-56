@@ -7,8 +7,8 @@
 set -e
 
 echo "🚀 Instalação Automática - Clínica Conexão Mental"
-echo "Servidor: 157.173.120.220"
-echo "Domínio: conexaomental.online"
+echo "Servidor: SEU_IP_SERVIDOR"
+echo "Domínio: SEU_DOMINIO.com"
 echo "PostgreSQL: Versão 15"
 echo "================================================"
 
