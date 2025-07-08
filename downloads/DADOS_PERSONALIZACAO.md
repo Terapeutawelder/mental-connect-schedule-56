@@ -5,18 +5,18 @@
 ### 1. **SERVIDOR E DOMÍNIO** (Linhas 10-11)
 ```bash
 # Substitua pelos seus dados:
-echo "Servidor: SEU_IP_SERVIDOR"        # Ex: 192.168.1.100
-echo "Domínio: SEU_DOMINIO.com"         # Ex: minhaclinica.com.br
+echo "Servidor: 157.173.120.220        # Ex: 192.168.1.100
+echo "Domínio: conexaomental.online         # Ex: minhaclinica.com.br
 ```
 
 ### 2. **CONFIGURAÇÃO NGINX** (Linha 353)
 ```bash
-server_name SEU_IP_SERVIDOR SEU_DOMINIO.com www.SEU_DOMINIO.com;
+server_name 157.173.120.220   conexaomental.online www.conexaomental.online;
 ```
 
 ### 3. **CORS DA API** (Linha 197)
 ```bash
-CORS_ORIGIN=https://SEU_DOMINIO.com
+CORS_ORIGIN=https://conexaomental.online
 ```
 
 ### 4. **EMAIL ADMIN** (Linha 147 e 620)
