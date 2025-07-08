@@ -7,8 +7,8 @@
 set -e
 
 echo "🚀 Instalação Automática - Clínica Conexão Mental"
-echo "Servidor: SEU_IP_SERVIDOR"
-echo "Domínio: SEU_DOMINIO.com"
+echo "Servidor: 157.173.120.220"
+echo "Domínio: conexaomental.online"
 echo "PostgreSQL: Versão 15"
 echo "================================================"
 
@@ -144,7 +144,7 @@ CREATE TRIGGER update_appointments_updated_at BEFORE UPDATE ON appointments FOR 
 
 -- Inserir usuário admin com senha hash correta
 INSERT INTO profiles (user_id, email, full_name, role, password_hash) VALUES 
-('123e4567-e89b-12d3-a456-426614174000', 'admin@conexaomental.online', 'Administrador Sistema', 'admin', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/SjClOK5cG');
+('123e4567-e89b-12d3-a456-426614174000', 'contato@conexaomental.online', 'Administrador Sistema', 'admin', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/SjClOK5cG');
 EOF
 
 unset PGPASSWORD
@@ -617,7 +617,7 @@ echo "🔐 Preparando SSL..."
 cat > /usr/local/bin/conexao-ssl << 'EOF'
 #!/bin/bash
 echo "Configurando SSL para conexaomental.online..."
-certbot --nginx -d conexaomental.online -d www.conexaomental.online --non-interactive --agree-tos --email admin@conexaomental.online
+certbot --nginx -d conexaomental.online -d www.conexaomental.online --non-interactive --agree-tos --email contato@conexaomental.online
 systemctl reload nginx
 echo "SSL configurado com sucesso!"
 EOF
@@ -634,7 +634,7 @@ echo "📊 Status: conexao-status"
 echo ""
 echo "📋 CREDENCIAIS:"
 echo "PostgreSQL: postgres / W83683601r@#"
-echo "Admin: admin@conexaomental.online / admin123"
+echo "Admin: contato@conexaomental.online / admin123"
 echo ""
 echo "🔧 COMANDOS ÚTEIS:"
 echo "conexao-status       - Status dos serviços"
@@ -680,4 +680,4 @@ unset PGPASSWORD
 
 echo ""
 echo "✨ Instalação finalizada! Acesse: https://conexaomental.online"
-echo "📞 Para suporte: admin@conexaomental.online"
+echo "📞 Para suporte: contato@conexaomental.online"
