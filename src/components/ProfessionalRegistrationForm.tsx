@@ -3,6 +3,9 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import PersonalDataForm from "@/components/ProfessionalForm/PersonalDataForm";
 import ProfessionalDataForm from "@/components/ProfessionalForm/ProfessionalDataForm";
 import AddressForm from "@/components/ProfessionalForm/AddressForm";
@@ -17,6 +20,9 @@ interface ProfessionalRegistrationFormProps {
 const ProfessionalRegistrationForm = ({ referralCode }: ProfessionalRegistrationFormProps) => {
   const { toast } = useToast();
   const { validateForm } = useFormValidation();
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -110,27 +116,108 @@ const ProfessionalRegistrationForm = ({ referralCode }: ProfessionalRegistration
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm(formData, selectedSpecialties, acceptedContract, acceptedTerms, acceptedPrivacy)) {
       return;
     }
 
-    console.log("Dados do profissional:", {
-      ...formData,
-      specialties: selectedSpecialties,
-      availableDates,
-      timeSlots,
-      referralCode
-    });
+    setIsSubmitting(true);
 
-    toast({
-      title: "Sucesso!",
-      description: referralCode 
-        ? `Cadastro realizado com sucesso com código de indicação ${referralCode}. Aguarde aprovação.`
-        : "Cadastro realizado com sucesso. Aguarde aprovação.",
-    });
+    try {
+      // First, create the auth user
+      const { error: signUpError } = await signUp(formData.email, formData.password, {
+        full_name: formData.name,
+        role: 'professional'
+      });
+
+      if (signUpError) {
+        toast({
+          title: "Erro no cadastro",
+          description: signUpError.message || "Erro ao criar conta de usuário",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get the current user session to get the user ID
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        toast({
+          title: "Erro",
+          description: "Erro ao obter dados do usuário",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get the profile ID from the profiles table
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (!profile) {
+        toast({
+          title: "Erro",
+          description: "Erro ao obter perfil do usuário",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Create professional profile
+      const { error: professionalError } = await supabase
+        .from('professionals')
+        .insert({
+          profile_id: profile.id,
+          crp: formData.registrationNumber,
+          specialties: selectedSpecialties,
+          bio: formData.description,
+          available_hours: {
+            dates: availableDates.map(date => date.toISOString()),
+            slots: timeSlots
+          }
+        });
+
+      if (professionalError) {
+        toast({
+          title: "Erro",
+          description: professionalError.message || "Erro ao criar perfil profissional",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      toast({
+        title: "Sucesso!",
+        description: referralCode 
+          ? `Cadastro realizado com sucesso com código de indicação ${referralCode}. Verifique seu email para confirmar sua conta.`
+          : "Cadastro realizado com sucesso. Verifique seu email para confirmar sua conta.",
+      });
+
+      // Redirect to login after successful registration
+      setTimeout(() => {
+        navigate('/auth');
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error during registration:', error);
+      toast({
+        title: "Erro inesperado",
+        description: "Ocorreu um erro durante o cadastro. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -226,8 +313,8 @@ const ProfessionalRegistrationForm = ({ referralCode }: ProfessionalRegistration
       </Card>
 
       <div className="flex justify-end">
-        <Button type="submit" size="lg">
-          Cadastrar Profissional
+        <Button type="submit" size="lg" disabled={isSubmitting}>
+          {isSubmitting ? "Cadastrando..." : "Cadastrar Profissional"}
         </Button>
       </div>
     </form>
