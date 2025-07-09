@@ -1,7 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
 interface User {
   id: string;
@@ -14,7 +12,6 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  session: Session | null;
   loading: boolean;
   signUp: (email: string, password: string, userData?: { full_name?: string; role?: string }) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -38,88 +35,87 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        if (session?.user) {
-          // Fetch profile data from profiles table
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
-          
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: profile.email,
-              full_name: profile.full_name,
-              role: profile.role,
-              created_at: profile.created_at,
-              updated_at: profile.updated_at
-            });
-          }
-        } else {
-          setUser(null);
+  const API_BASE_URL = 'https://conexaomental.online/api';
+
+  const getAuthToken = () => localStorage.getItem('auth_token');
+  
+  const setAuthToken = (token: string) => localStorage.setItem('auth_token', token);
+  
+  const removeAuthToken = () => localStorage.removeItem('auth_token');
+
+  const fetchUserProfile = async () => {
+    try {
+      const token = getAuthToken();
+      if (!token) return null;
+
+      const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          removeAuthToken();
+        }
+        return null;
+      }
+
+      const data = await response.json();
+      return data.user;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const token = getAuthToken();
+        if (token) {
+          const userProfile = await fetchUserProfile();
+          setUser(userProfile);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        removeAuthToken();
+      } finally {
         setLoading(false);
       }
-    );
+    };
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session?.user) {
-        // Fetch profile data from profiles table
-        supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .single()
-          .then(({ data: profile }) => {
-            if (profile) {
-              setUser({
-                id: profile.id,
-                email: profile.email,
-                full_name: profile.full_name,
-                role: profile.role,
-                created_at: profile.created_at,
-                updated_at: profile.updated_at
-              });
-            }
-          });
-      }
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    initAuth();
   }, []);
 
   const signUp = async (email: string, password: string, userData?: { full_name?: string; role?: string }) => {
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            full_name: userData?.full_name || '',
-            role: userData?.role || 'patient'
-          }
-        }
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          full_name: userData?.full_name || '',
+          role: userData?.role || 'patient'
+        })
       });
 
-      if (error) {
-        return { error };
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { error: { message: data.error || 'Erro durante o cadastro' } };
       }
+
+      // Salvar token e atualizar estado do usuário
+      setAuthToken(data.token);
+      setUser(data.user);
 
       return { error: null };
     } catch (error) {
@@ -130,14 +126,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+      const response = await fetch(`${API_BASE_URL}/auth/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
       });
 
-      if (error) {
-        return { error };
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { error: { message: data.error || 'Erro durante o login' } };
       }
+
+      // Salvar token e atualizar estado do usuário
+      setAuthToken(data.token);
+      setUser(data.user);
 
       return { error: null };
     } catch (error) {
@@ -148,9 +156,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      removeAuthToken();
       setUser(null);
-      setSession(null);
       
       toast({
         title: "Logout realizado",
@@ -167,12 +174,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const resetPassword = async (email: string) => {
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth`
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
       });
 
-      if (error) {
-        return { error };
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { error: { message: data.error || 'Erro ao enviar email de recuperação' } };
       }
 
       return { error: null };
@@ -184,7 +197,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const value = {
     user,
-    session,
     loading,
     signUp,
     signIn,

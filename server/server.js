@@ -236,6 +236,57 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Algo deu errado!' });
 });
 
+// Rota para criar perfil profissional
+app.post('/api/professionals', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'professional') {
+      return res.status(403).json({ error: 'Acesso negado. Apenas profissionais podem criar perfis profissionais.' });
+    }
+
+    const { crp, specialties, bio, experience, available_hours, referral_code } = req.body;
+
+    // Verificar se já existe um perfil profissional para este usuário
+    const existingProfessional = await pool.query(
+      'SELECT id FROM professionals WHERE profile_id = $1',
+      [req.user.userId]
+    );
+
+    if (existingProfessional.rows.length > 0) {
+      return res.status(400).json({ error: 'Perfil profissional já existe para este usuário' });
+    }
+
+    // O userId já é o profile_id correto
+    const profileId = req.user.userId;
+
+    // Criar perfil profissional
+    const result = await pool.query(
+      `INSERT INTO professionals (profile_id, crp, specialties, bio, available_hours) 
+       VALUES ($1, $2, $3, $4, $5) 
+       RETURNING id, profile_id, crp, specialties, bio, available_hours, created_at`,
+      [profileId, crp, specialties, bio, available_hours]
+    );
+
+    const professional = result.rows[0];
+
+    res.status(201).json({
+      message: 'Perfil profissional criado com sucesso',
+      professional: {
+        id: professional.id,
+        profile_id: professional.profile_id,
+        crp: professional.crp,
+        specialties: professional.specialties,
+        bio: professional.bio,
+        available_hours: professional.available_hours,
+        created_at: professional.created_at
+      }
+    });
+
+  } catch (error) {
+    console.error('Erro ao criar perfil profissional:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Rota não encontrada' });

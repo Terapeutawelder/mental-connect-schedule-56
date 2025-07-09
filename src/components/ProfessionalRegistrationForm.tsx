@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import PersonalDataForm from "@/components/ProfessionalForm/PersonalDataForm";
 import ProfessionalDataForm from "@/components/ProfessionalForm/ProfessionalDataForm";
@@ -126,7 +125,7 @@ const ProfessionalRegistrationForm = ({ referralCode }: ProfessionalRegistration
     setIsSubmitting(true);
 
     try {
-      // First, create the auth user
+      // First, create the auth user (professional)
       const { error: signUpError } = await signUp(formData.email, formData.password, {
         full_name: formData.name,
         role: 'professional'
@@ -142,54 +141,46 @@ const ProfessionalRegistrationForm = ({ referralCode }: ProfessionalRegistration
         return;
       }
 
-      // Get the current user session to get the user ID
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user) {
+      // After successful signup, create professional profile
+      const API_BASE_URL = 'https://conexaomental.online/api';
+      const token = localStorage.getItem('auth_token');
+
+      if (!token) {
         toast({
           title: "Erro",
-          description: "Erro ao obter dados do usuário",
+          description: "Token de autenticação não encontrado",
           variant: "destructive",
         });
         setIsSubmitting(false);
         return;
       }
 
-      // Get the profile ID from the profiles table
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('user_id', session.user.id)
-        .single();
+      const professionalData = {
+        crp: formData.registrationNumber,
+        specialties: selectedSpecialties,
+        bio: formData.description,
+        experience: formData.experience,
+        available_hours: {
+          dates: availableDates.map(date => date.toISOString()),
+          slots: timeSlots
+        },
+        referral_code: referralCode
+      };
 
-      if (!profile) {
+      const response = await fetch(`${API_BASE_URL}/professionals`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(professionalData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
         toast({
           title: "Erro",
-          description: "Erro ao obter perfil do usuário",
-          variant: "destructive",
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Create professional profile
-      const { error: professionalError } = await supabase
-        .from('professionals')
-        .insert({
-          profile_id: profile.id,
-          crp: formData.registrationNumber,
-          specialties: selectedSpecialties,
-          bio: formData.description,
-          available_hours: {
-            dates: availableDates.map(date => date.toISOString()),
-            slots: timeSlots
-          }
-        });
-
-      if (professionalError) {
-        toast({
-          title: "Erro",
-          description: professionalError.message || "Erro ao criar perfil profissional",
+          description: errorData.error || "Erro ao criar perfil profissional",
           variant: "destructive",
         });
         setIsSubmitting(false);
@@ -199,8 +190,8 @@ const ProfessionalRegistrationForm = ({ referralCode }: ProfessionalRegistration
       toast({
         title: "Sucesso!",
         description: referralCode 
-          ? `Cadastro realizado com sucesso com código de indicação ${referralCode}. Verifique seu email para confirmar sua conta.`
-          : "Cadastro realizado com sucesso. Verifique seu email para confirmar sua conta.",
+          ? `Cadastro realizado com sucesso com código de indicação ${referralCode}. Aguarde aprovação.`
+          : "Cadastro realizado com sucesso. Aguarde aprovação.",
       });
 
       // Redirect to login after successful registration
