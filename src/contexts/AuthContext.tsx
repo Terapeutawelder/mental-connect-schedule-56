@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface User {
   id: string;
@@ -119,6 +120,40 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signUp = async (email: string, password: string, userData?: { full_name?: string; role?: string }) => {
     try {
+      // Primeiro tenta o servidor customizado
+      const serverHealthy = await checkServerHealth();
+      
+      if (!serverHealthy) {
+        // Fallback para Supabase se o servidor customizado estiver offline
+        console.log('Servidor customizado offline, tentando cadastro via Supabase...');
+        
+        try {
+          const { data: authData, error: supabaseError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: {
+                full_name: userData?.full_name || '',
+                role: userData?.role || 'patient'
+              }
+            }
+          });
+
+          if (supabaseError) {
+            return { error: { message: supabaseError.message || 'Erro durante o cadastro' } };
+          }
+
+          if (authData.user) {
+            // Supabase trigger já deve criar o perfil automaticamente
+            return { error: null };
+          }
+        } catch (fallbackError) {
+          console.error('Fallback Supabase signup error:', fallbackError);
+          return { error: { message: 'Servidor offline e cadastro falhou. Tente novamente mais tarde.' } };
+        }
+      }
+
+      // Servidor customizado disponível
       const response = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: {
@@ -154,9 +189,50 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // Primeiro verifica se o servidor está online
       const serverHealthy = await checkServerHealth();
       if (!serverHealthy) {
+        // Fallback para autenticação Supabase se o servidor customizado estiver offline
+        console.log('Servidor customizado offline, tentando Supabase...');
+        
+        try {
+          const { data: authData, error: supabaseError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (supabaseError) {
+            return { error: { message: 'Credenciais inválidas ou servidor offline' } };
+          }
+
+          if (authData.user) {
+            // Buscar perfil do usuário
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('user_id', authData.user.id)
+              .single();
+
+            if (profile) {
+              const userData = {
+                id: profile.id,
+                email: profile.email,
+                full_name: profile.full_name,
+                role: profile.role as 'patient' | 'professional' | 'admin',
+                created_at: profile.created_at,
+                updated_at: profile.updated_at
+              };
+              
+              setUser(userData);
+              // Salvar token simulado para compatibilidade
+              setAuthToken(authData.session?.access_token || 'supabase-token');
+              return { error: null };
+            }
+          }
+        } catch (fallbackError) {
+          console.error('Fallback Supabase error:', fallbackError);
+        }
+
         return { 
           error: { 
-            message: 'Servidor offline. Verifique se o servidor está rodando em https://conexaomental.online/api' 
+            message: 'Servidor offline e fallback falhou. Tente novamente mais tarde.' 
           } 
         };
       }
@@ -196,7 +272,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       
       if (error.name === 'TypeError' || error.message.includes('fetch')) {
         errorMessage = 'Servidor inacessível. Verifique se o backend está rodando em https://conexaomental.online/api';
-      } else if (error.message.includes('timeout') || error.name === 'AbortError') {
+      } else if (error.name === 'AbortError') {
         errorMessage = 'Timeout na conexão. O servidor não está respondendo.';
       }
       
