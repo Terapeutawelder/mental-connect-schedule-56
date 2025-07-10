@@ -5,6 +5,7 @@ import { Wifi, WifiOff } from 'lucide-react';
 const ServerStatus = () => {
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
   const [lastCheck, setLastCheck] = useState<Date>(new Date());
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const checkServerStatus = async () => {
     try {
@@ -21,11 +22,20 @@ const ServerStatus = () => {
 
       clearTimeout(timeoutId);
       setIsOnline(response.ok);
+      setErrorMessage('');
       setLastCheck(new Date());
     } catch (error) {
       console.error('Server status check failed:', error);
       setIsOnline(false);
       setLastCheck(new Date());
+      
+      if (error.name === 'AbortError') {
+        setErrorMessage('Timeout - Servidor não responde');
+      } else if (error.name === 'TypeError' || error.message.includes('fetch')) {
+        setErrorMessage('Servidor offline ou inacessível');
+      } else {
+        setErrorMessage(`Erro: ${error.message}`);
+      }
     }
   };
 
@@ -45,19 +55,24 @@ const ServerStatus = () => {
   }
 
   return (
-    <Badge variant={isOnline ? "default" : "destructive"} className="flex items-center gap-1">
-      {isOnline ? (
-        <>
-          <Wifi className="w-3 h-3" />
-          Online
-        </>
-      ) : (
-        <>
-          <WifiOff className="w-3 h-3" />
-          Offline
-        </>
+    <div className="flex flex-col gap-1">
+      <Badge variant={isOnline ? "default" : "destructive"} className="flex items-center gap-1">
+        {isOnline ? (
+          <>
+            <Wifi className="w-3 h-3" />
+            Servidor Online
+          </>
+        ) : (
+          <>
+            <WifiOff className="w-3 h-3" />
+            Servidor Offline
+          </>
+        )}
+      </Badge>
+      {!isOnline && errorMessage && (
+        <p className="text-xs text-muted-foreground">{errorMessage}</p>
       )}
-    </Badge>
+    </div>
   );
 };
 

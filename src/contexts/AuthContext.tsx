@@ -39,6 +39,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { toast } = useToast();
 
   const API_BASE_URL = 'https://conexaomental.online/api';
+  
+  const checkServerHealth = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/health`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.ok;
+    } catch (error) {
+      console.error('Server health check failed:', error);
+      return false;
+    }
+  };
 
   const getAuthToken = () => localStorage.getItem('auth_token');
   
@@ -136,6 +151,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      // Primeiro verifica se o servidor está online
+      const serverHealthy = await checkServerHealth();
+      if (!serverHealthy) {
+        return { 
+          error: { 
+            message: 'Servidor offline. Verifique se o servidor está rodando em https://conexaomental.online/api' 
+          } 
+        };
+      }
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
 
@@ -170,9 +195,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       let errorMessage = 'Erro inesperado durante o login';
       
       if (error.name === 'TypeError' || error.message.includes('fetch')) {
-        errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
-      } else if (error.message.includes('timeout')) {
-        errorMessage = 'Timeout na conexão. Tente novamente.';
+        errorMessage = 'Servidor inacessível. Verifique se o backend está rodando em https://conexaomental.online/api';
+      } else if (error.message.includes('timeout') || error.name === 'AbortError') {
+        errorMessage = 'Timeout na conexão. O servidor não está respondendo.';
       }
       
       return { error: { message: errorMessage } };
