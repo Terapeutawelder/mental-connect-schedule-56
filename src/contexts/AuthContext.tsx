@@ -51,12 +51,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const token = getAuthToken();
       if (!token) return null;
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       const response = await fetch(`${API_BASE_URL}/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        }
+        },
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -69,6 +75,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return data.user;
     } catch (error) {
       console.error('Error fetching user profile:', error);
+      // If there's a network error, remove token to avoid stuck state
+      if (error.name === 'TypeError' || error.message.includes('fetch')) {
+        removeAuthToken();
+      }
       return null;
     }
   };
@@ -126,6 +136,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const response = await fetch(`${API_BASE_URL}/auth/signin`, {
         method: 'POST',
         headers: {
@@ -134,14 +147,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         body: JSON.stringify({
           email,
           password
-        })
+        }),
+        signal: controller.signal
       });
 
-      const data = await response.json();
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
+        const data = await response.json().catch(() => ({ error: 'Erro de comunicação com o servidor' }));
         return { error: { message: data.error || 'Erro durante o login' } };
       }
+
+      const data = await response.json();
 
       // Salvar token e atualizar estado do usuário
       setAuthToken(data.token);
@@ -150,7 +167,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return { error: null };
     } catch (error) {
       console.error('Unexpected SignIn error:', error);
-      return { error: { message: 'Erro inesperado durante o login' } };
+      let errorMessage = 'Erro inesperado durante o login';
+      
+      if (error.name === 'TypeError' || error.message.includes('fetch')) {
+        errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.';
+      } else if (error.message.includes('timeout')) {
+        errorMessage = 'Timeout na conexão. Tente novamente.';
+      }
+      
+      return { error: { message: errorMessage } };
     }
   };
 

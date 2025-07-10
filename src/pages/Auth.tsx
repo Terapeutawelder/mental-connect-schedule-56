@@ -14,6 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { signInSchema, signUpSchema, resetPasswordSchema, sanitizeInput } from "@/lib/validationSchemas";
 import type { SignInFormData, SignUpFormData, ResetPasswordFormData } from "@/lib/validationSchemas";
+import ServerStatus from "@/components/ServerStatus";
 
 const Auth = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -265,7 +266,10 @@ const Auth = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-center">Autenticação</CardTitle>
+            <CardTitle className="text-center flex items-center justify-between">
+              Autenticação
+              <ServerStatus />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
