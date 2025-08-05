@@ -1,0 +1,231 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4057313  │ 0s     │ 0    │ online    │ 0%       │ 30.1mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 10
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | head -20
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | grep -i "planos\|faq"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4060593  │ 1s     │ 56   │ online    │ 0%       │ 60.3mb   │ root     │ disabled │
+│ 1  │ conexaomental    │ default     │ N/A     │ fork    │ 4060623  │ 0s     │ 0    │ online    │ 0%       │ 33.8mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 10
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | head -20
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | grep -i "planos\|faq"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 logs conexaomental --lines 20
+[TAILING] Tailing last 20 lines for [conexaomental] process (change the value with --lines option)
+/root/.pm2/logs/conexaomental-error.log last 20 lines:
+0|conexaom | }
+0|conexaom | 
+0|conexaom | Node.js v18.20.8
+0|conexaom | node:internal/errors:496
+0|conexaom |     ErrorCaptureStackTrace(err);
+0|conexaom |     ^
+0|conexaom | 
+0|conexaom | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|conexaom |     at new NodeError (node:internal/errors:405:5)
+0|conexaom |     at validateString (node:internal/validators:162:11)
+0|conexaom |     at Object.resolve (node:path:1115:7)
+0|conexaom |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+0|conexaom |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaom |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaom |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaom |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|conexaom |   code: 'ERR_INVALID_ARG_TYPE'
+0|conexaom | }
+0|conexaom | 
+0|conexaom | Node.js v18.20.8
+
+/root/.pm2/logs/conexaomental-out.log last 20 lines:
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+
+1|conexaomental  | node:internal/errors:496
+1|conexaomental  |     ErrorCaptureStackTrace(err);
+1|conexaomental  |     ^
+1|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+1|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+1|conexaomental  |     at validateString (node:internal/validators:162:11)
+1|conexaomental  |     at Object.resolve (node:path:1115:7)
+1|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+1|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+1|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+1|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+1|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+1|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+1|conexaomental  | }
+1|conexaomental  | Node.js v18.20.8
+0|conexaomental  | node:internal/errors:496
+0|conexaomental  |     ErrorCaptureStackTrace(err);
+0|conexaomental  |     ^
+0|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+0|conexaomental  |     at validateString (node:internal/validators:162:11)
+0|conexaomental  |     at Object.resolve (node:path:1115:7)
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+0|conexaomental  | }
+0|conexaomental  | Node.js v18.20.8
+1|conexaomental  | > rest-express@1.0.0 start
+1|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+1|conexaomental  | node:internal/errors:496
+1|conexaomental  |     ErrorCaptureStackTrace(err);
+1|conexaomental  |     ^
+1|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+1|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+1|conexaomental  |     at validateString (node:internal/validators:162:11)
+1|conexaomental  |     at Object.resolve (node:path:1115:7)
+1|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+1|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+1|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+1|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+1|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+1|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+1|conexaomental  | }
+1|conexaomental  | Node.js v18.20.8
+0|conexaomental  | node:internal/errors:496
+0|conexaomental  |     ErrorCaptureStackTrace(err);
+0|conexaomental  |     ^
+0|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+0|conexaomental  |     at validateString (node:internal/validators:162:11)
+0|conexaomental  |     at Object.resolve (node:path:1115:7)
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+0|conexaomental  | }
+0|conexaomental  | Node.js v18.20.8
+1|conexaomental  | > rest-express@1.0.0 start
+1|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+1|conexaomental  | node:internal/errors:496
+1|conexaomental  |     ErrorCaptureStackTrace(err);
+1|conexaomental  |     ^
+1|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+1|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+1|conexaomental  |     at validateString (node:internal/validators:162:11)
+1|conexaomental  |     at Object.resolve (node:path:1115:7)
+1|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+1|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+1|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+1|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+1|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+1|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+1|conexaomental  | }
+1|conexaomental  | Node.js v18.20.8
+0|conexaomental  | node:internal/errors:496
+0|conexaomental  |     ErrorCaptureStackTrace(err);
+0|conexaomental  |     ^
+0|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+0|conexaomental  |     at validateString (node:internal/validators:162:11)
+0|conexaomental  |     at Object.resolve (node:path:1115:7)
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+0|conexaomental  | }
+0|conexaomental  | Node.js v18.20.8
+1|conexaomental  | > rest-express@1.0.0 start
+1|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+1|conexaomental  | node:internal/errors:496
+1|conexaomental  |     ErrorCaptureStackTrace(err);
+1|conexaomental  |     ^
+1|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+1|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+1|conexaomental  |     at validateString (node:internal/validators:162:11)
+1|conexaomental  |     at Object.resolve (node:path:1115:7)
+1|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+1|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+1|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+1|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+1|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+1|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+1|conexaomental  | }
+1|conexaomental  | Node.js v18.20.8
+0|conexaomental  | node:internal/errors:496
+0|conexaomental  |     ErrorCaptureStackTrace(err);
+0|conexaomental  |     ^
+0|conexaomental  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|conexaomental  |     at new NodeError (node:internal/errors:405:5)
+0|conexaomental  |     at validateString (node:internal/validators:162:11)
+0|conexaomental  |     at Object.resolve (node:path:1115:7)
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:2665:17
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|conexaomental  |   code: 'ERR_INVALID_ARG_TYPE'
+0|conexaomental  | }
+0|conexaomental  | Node.js v18.20.8
+1|conexaomental  | > rest-express@1.0.0 start
+1|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0, 1 ])
+[PM2] [conexaomental](0) ✓
+[PM2] [conexaomental](1) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" pm2 start npm --name "conexaomental" -- run dev
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4067051  │ 0s     │ 0    │ online    │ 0%       │ 21.1mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://localhost:5000
+*   Trying ::1:5000...
+* TCP_NODELAY set
+* Immediate connect fail for ::1: Cannot assign requested address
+* Closing connection 0
+curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

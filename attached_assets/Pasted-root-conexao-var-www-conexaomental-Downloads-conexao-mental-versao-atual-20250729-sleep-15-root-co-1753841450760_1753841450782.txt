@@ -1,0 +1,126 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | head -10
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+2025-07-29 23:06:21 - Installing pre-requisites
+Hit:1 http://asi-fs-n.contabo.net/ubuntu focal InRelease
+Get:2 http://asi-fs-n.contabo.net/ubuntu focal-updates InRelease [128 kB]                                                                            
+Hit:3 http://apt.postgresql.org/pub/repos/apt focal-pgdg InRelease                                                                                   
+Get:4 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]                                                                          
+Get:5 http://asi-fs-n.contabo.net/ubuntu focal-backports InRelease [128 kB]                                                                          
+Hit:6 https://download.docker.com/linux/ubuntu focal InRelease                                                                                       
+Hit:7 https://deb.nodesource.com/node_18.x nodistro InRelease
+Fetched 383 kB in 2s (163 kB/s)
+Reading package lists... Done
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'http://apt.postgresql.org/pub/repos/apt focal-pgdg InRelease' doesn't support architecture 'i386'
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+ca-certificates is already the newest version (20240203~20.04.1).
+curl is already the newest version (7.68.0-1ubuntu2.25).
+gnupg is already the newest version (2.2.19-3ubuntu2.5).
+apt-transport-https is already the newest version (2.0.11).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Hit:1 http://asi-fs-n.contabo.net/ubuntu focal InRelease
+Hit:2 http://asi-fs-n.contabo.net/ubuntu focal-updates InRelease                                                            
+Hit:3 http://asi-fs-n.contabo.net/ubuntu focal-backports InRelease                                                          
+Hit:4 http://apt.postgresql.org/pub/repos/apt focal-pgdg InRelease                                                          
+Hit:5 https://download.docker.com/linux/ubuntu focal InRelease                                                                                       
+Get:6 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]                                                                              
+Get:7 https://deb.nodesource.com/node_20.x nodistro/main amd64 Packages [12.2 kB]
+Hit:8 http://security.ubuntu.com/ubuntu focal-security InRelease
+Fetched 24.4 kB in 4s (6,349 B/s)
+Reading package lists... Done
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'http://apt.postgresql.org/pub/repos/apt focal-pgdg InRelease' doesn't support architecture 'i386'
+2025-07-29 23:06:41 - Repository configured successfully.
+2025-07-29 23:06:41 - To install Node.js, run: apt-get install nodejs -y
+2025-07-29 23:06:41 - You can use N|solid Runtime as a node.js alternative
+2025-07-29 23:06:41 - To install N|solid Runtime, run: apt-get install nsolid -y 
+
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo apt-get install -y nodejs
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages will be upgraded:
+  nodejs
+1 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Need to get 32.0 MB of archives.
+After this operation, 11.7 MB of additional disk space will be used.
+Get:1 https://deb.nodesource.com/node_20.x nodistro/main amd64 nodejs amd64 20.19.4-1nodesource1 [32.0 MB]
+Fetched 32.0 MB in 1s (39.8 MB/s) 
+(Reading database ... 126051 files and directories currently installed.)
+Preparing to unpack .../nodejs_20.19.4-1nodesource1_amd64.deb ...
+Detected old npm client, removing...
+Unpacking nodejs (20.19.4-1nodesource1) over (18.20.8-1nodesource1) ...
+Setting up nodejs (20.19.4-1nodesource1) ...
+Processing triggers for man-db (2.9.1-1) ...
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# node --version
+v20.19.4
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# npm install
+
+up to date, audited 550 packages in 5s
+
+70 packages are looking for funding
+  run `npm fund` for details
+
+10 vulnerabilities (3 low, 7 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.15 building for production...
+transforming (1) index.htmlBrowserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 2633 modules transformed.
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/OnlineTherapySection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/SearchSection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/ProfessionalsSection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+../dist/public/index.html                                                 0.69 kB │ gzip:   0.40 kB
+../dist/public/assets/Header de login (3)_1752464376695-qEK9OtF0.png  2,911.42 kB
+../dist/public/assets/index-DPZaXoqA.css                                112.59 kB │ gzip:  17.34 kB
+../dist/public/assets/index-tZJhqzCc.js                               1,006.77 kB │ gzip: 267.27 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 20.05s
+
+  dist/index.js  100.9kb
+
+⚡ Done in 63ms
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4082425  │ 0s     │ 0    │ online    │ 0%       │ 22.1mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | head -10
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | grep -i "planos\|faq"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

@@ -1,0 +1,949 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -4 -s http://127.0.0.1:5000 | head -5
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://conexaomental.online
+*   Trying 157.173.120.220:80...
+* TCP_NODELAY set
+* Connected to conexaomental.online (157.173.120.220) port 80 (#0)
+> GET / HTTP/1.1
+> Host: conexaomental.online
+> User-Agent: curl/7.68.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: nginx/1.18.0 (Ubuntu)
+< Date: Wed, 30 Jul 2025 03:08:30 GMT
+< Content-Type: text/html; charset=UTF-8
+< Content-Length: 687
+< Connection: keep-alive
+< X-Powered-By: Express
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: DENY
+< X-XSS-Protection: 1; mode=block
+< Strict-Transport-Security: max-age=31536000; includeSubDomains
+< Referrer-Policy: strict-origin-when-cross-origin
+< Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+< Access-Control-Allow-Headers: Content-Type, Authorization
+< Access-Control-Allow-Credentials: true
+< Accept-Ranges: bytes
+< Cache-Control: public, max-age=0
+< Last-Modified: Wed, 30 Jul 2025 02:08:33 GMT
+< ETag: W/"2af-1985916a727"
+< 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <script type="module" crossorigin src="/assets/index-tZJhqzCc.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DPZaXoqA.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+  </body>
+* Connection #0 to host conexaomental.online left intact
+</html>root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo tee /etc/nginx/sites-available/conexaomental << 'EOF'
+> server {
+>     listen 80 default_server;
+>     server_name conexaomental.online www.conexaomental.online _;
+>     
+>     location / {
+>         proxy_pass http://127.0.0.1:5000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection 'upgrade';
+>         proxy_set_header Host $host;
+>         proxy_set_header X-Real-IP $remote_addr;
+>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+>         proxy_set_header X-Forwarded-Proto $scheme;
+>         proxy_cache_bypass $http_upgrade;
+>         proxy_read_timeout 86400;
+>         
+>         # Headers anti-cache
+>         add_header Cache-Control "no-cache, no-store, must-revalidate";
+>         add_header Pragma "no-cache";
+>         add_header Expires "0";
+>     }
+> }
+> EOF
+server {
+    listen 80 default_server;
+    server_name conexaomental.online www.conexaomental.online _;
+    
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+        
+        # Headers anti-cache
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+}
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://conexaomental.online | grep -i "planos\|faq" | head -3
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo tee /etc/nginx/sites-available/conexaomental << 'EOF'
+> server {
+>     listen 80 default_server;
+>     server_name clinicaconexaomental.online www.clinicaconexaomental.online;
+>     
+>     location / {
+>         proxy_pass http://127.0.0.1:5000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection 'upgrade';
+>         proxy_set_header Host $host;
+>         proxy_set_header X-Real-IP $remote_addr;
+>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+>         proxy_set_header X-Forwarded-Proto $scheme;
+>         proxy_cache_bypass $http_upgrade;
+>         proxy_read_timeout 86400;
+>         
+>         # Headers anti-cache
+>         add_header Cache-Control "no-cache, no-store, must-revalidate";
+>         add_header Pragma "no-cache";
+>         add_header Expires "0";
+>     }
+> }
+> EOFsudo nginx -t
+> sudo systemctl reload nginx
+> ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://clinicaconexaomental.online
+*   Trying 185.158.133.1:80...
+* TCP_NODELAY set
+* Connected to clinicaconexaomental.online (185.158.133.1) port 80 (#0)
+> GET / HTTP/1.1
+> Host: clinicaconexaomental.online
+> User-Agent: curl/7.68.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 301 Moved Permanently
+< Date: Wed, 30 Jul 2025 03:17:11 GMT
+< Content-Length: 0
+< Connection: keep-alive
+< CF-RAY: 9671b39d5ec6dc98-FRA
+< Location: https://clinicaconexaomental.online/
+< Server: cloudflare
+< 
+* Connection #0 to host clinicaconexaomental.online left intact
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://clinicaconexaomental.online | grep -i "planos\|faq" | head -3
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 kill
+[PM2][WARN] No process found
+[PM2] [v] All Applications Stopped
+[PM2] [v] PM2 Daemon Stopped
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# rm -rf dist/
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.15 building for production...
+transforming (3) src/main.tsxBrowserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 2633 modules transformed.
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/OnlineTherapySection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/SearchSection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/ProfessionalsSection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+../dist/public/index.html                                                 0.69 kB │ gzip:   0.40 kB
+../dist/public/assets/Header de login (3)_1752464376695-qEK9OtF0.png  2,911.42 kB
+../dist/public/assets/index-DPZaXoqA.css                                112.59 kB │ gzip:  17.34 kB
+../dist/public/assets/index-tZJhqzCc.js                               1,006.77 kB │ gzip: 267.27 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 35.90s
+
+  dist/index.js  100.9kb
+
+⚡ Done in 52ms
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ls -la dist/
+total 116
+drwxr-xr-x 3 root root   4096 Jul 30 00:20 .
+drwxr-xr-x 8 root root   4096 Jul 30 00:20 ..
+-rw-r--r-- 1 root root 103358 Jul 30 00:20 index.js
+drwxr-xr-x 4 root root   4096 Jul 30 00:20 public
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# echo "Build size:" && du -sh dist/
+Build size:
+4.3M    dist/
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable" pm2 start npm --name "conexaomental" -- start
+[PM2] Spawning PM2 daemon with pm2_home=/root/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4166631  │ 0s     │ 0    │ online    │ 0%       │ 36.9mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 20
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://127.0.0.1:5000 | grep -i "sessão de acolhimento"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://127.0.0.1:5000 | grep -i "como funciona o atendimento"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -s reload
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://clinicaconexaomental.online | grep -i "sessão de acolhimento"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # Verificar se estamos no diretório correto
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# find /var/www -name "package.json" -type f
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/openid-client/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/mz/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/picocolors/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@neondatabase/serverless/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fill-range/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.merge/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/input-otp/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/passport-strategy/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/uuid/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/on-headers/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-time-format/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-is/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel-reactive-utils/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel-reactive-utils/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel-reactive-utils/cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-binary-path/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/balanced-match/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/package-json-from-dist/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/package-json-from-dist/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/package-json-from-dist/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss-value-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lilconfig/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postgres-bytea/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/es-errors/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/set-cookie-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-extglob/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/buffer-from/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/whatwg-url/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ecdsa-sig-formatter/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/raw-body/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@stripe/stripe-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@stripe/react-stripe-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/browserslist/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/queue-microtask/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/csstype/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/mime/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pause/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/plugin-transform-react-jsx-source/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/traverse/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/code-frame/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/plugin-transform-react-jsx-self/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/core/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-string-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-validator-identifier/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-plugin-utils/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/generator/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helpers/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/runtime/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/runtime/helpers/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/template/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/compat-data/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-compilation-targets/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-validator-option/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-module-transforms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@babel/helper-module-imports/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express/node_modules/debug/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express/node_modules/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/source-map-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/yaml/browser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/yaml/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-path/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/hasown/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/foreground-child/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/foreground-child/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/foreground-child/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-timer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/motion-dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/split2/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/gensync/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/node/node_modules/tailwindcss/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/node/node_modules/jiti/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/node/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/oxide-linux-x64-gnu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/oxide/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/typography/node_modules/postcss-selector-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/typography/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/vite/node_modules/tailwindcss/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/vite/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tailwindcss/oxide-linux-x64-musl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/passport-local/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jwa/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pseudomap/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/content-disposition/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ansi-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/negotiator/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dlv/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-ease/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/readdirp/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/safer-buffer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/node-releases/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/autoprefixer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/drizzle-kit/node_modules/@esbuild/linux-x64/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/drizzle-kit/node_modules/esbuild/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/drizzle-kit/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pify/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/clsx/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lru-queue/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/which/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@nodelib/fs.stat/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@nodelib/fs.scandir/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@nodelib/fs.walk/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/supports-preserve-symlinks-flag/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/read-cache/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tsx/node_modules/@esbuild/linux-x64/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tsx/node_modules/esbuild/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tsx/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/iconv-lite/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-day-picker/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/timers-ext/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/scheduler/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/decimal.js-light/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express-session/node_modules/cookie-signature/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express-session/node_modules/cookie/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express-session/node_modules/debug/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express-session/node_modules/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/express-session/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jsonwebtoken/node_modules/semver/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jsonwebtoken/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@drizzle-team/brocli/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@vitejs/plugin-react/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ext/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/inherits/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/framer-motion/dom/mini/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/framer-motion/dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/framer-motion/client/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/framer-motion/mini/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/framer-motion/m/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/framer-motion/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/next-themes/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/binary-extensions/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/regenerator-runtime/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss-nested/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tailwindcss-animate/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/mime-db/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/undici-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-time/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/color-convert/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/nanoid/url-alphabet/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/nanoid/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/nanoid/async/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/nanoid/non-secure/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/minimatch/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/minimatch/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/minimatch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel-react/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel-react/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel-react/cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve-pkg-maps/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/use-sync-external-store/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postgres-interval/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/object-hash/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fraction.js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fresh/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/motion-utils/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lru-cache/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@alloc/quick-lru/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/electron-to-chromium/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/string-width/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/call-bind/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/yallist/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/base64url/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/modern-screenshot/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/isexe/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/get-nonce/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@esbuild/linux-x64/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/cookie-signature/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postgres-range/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/loose-envify/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tiny-invariant/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tiny-invariant/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/sonner/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/media-typer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/proxy-addr/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lines-and-columns/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/cssesc/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/insertAfter/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/collectElements/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/animationFrame/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/isTransform/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/collectSiblings/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/ownerWindow/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/remove/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/clear/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/scrollTo/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/hyphenateStyle/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/hyphenate/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/isWindow/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/activeElement/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/matches/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/ownerDocument/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/filterEventHandler/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/camelize/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/removeEventListener/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/siblings/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/transitionEnd/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/height/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/getComputedStyle/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/addEventListener/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/text/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/canUseDOM/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/camelizeStyle/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/width/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/scrollbarSize/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/childElements/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/triggerEvent/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/removeClass/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/closest/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/contains/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/querySelectorAll/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/animate/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/isVisible/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/getScrollAccessor/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/parents/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/offsetParent/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/isInput/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/scrollParent/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/scrollTop/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/isDocument/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/hasClass/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/offset/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/css/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/prepend/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/addClass/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/scrollLeft/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/listen/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/childNodes/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/nextUntil/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/attribute/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/toggleClass/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/dom-helpers/position/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/shebang-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/range-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/passport-google-oauth20/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/emoji-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tr46/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/graceful-fs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/caniuse-lite/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/eastasianwidth/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/escape-html/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-remove-scroll-bar/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-remove-scroll-bar/constants/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@esbuild-kit/core-utils/node_modules/@esbuild/linux-x64/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@esbuild-kit/core-utils/node_modules/esbuild/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@esbuild-kit/core-utils/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@esbuild-kit/esm-loader/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/gopd/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/toidentifier/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/set-function-length/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/glob-parent/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jose/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/webidl-conversions/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@jridgewell/set-array/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@jridgewell/sourcemap-codec/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@jridgewell/resolve-uri/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@jridgewell/gen-mapping/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@jridgewell/trace-mapping/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ts-interface-checker/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/get-tsconfig/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/utils-merge/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/passport-oauth2/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/source-map-support/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/methods/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/forwarded/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/recharts/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-router/node_modules/cookie/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-router/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-numeric/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/memorystore/node_modules/lru-cache/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/memorystore/node_modules/yallist/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/memorystore/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/shebang-command/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/isows/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/isows/_cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/isows/_esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-parse/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jws/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lucide-react/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-protocol/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-resizable-panels/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jackspeak/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jackspeak/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jackspeak/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/get-intrinsic/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tailwindcss/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-remove-scroll/UI/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-remove-scroll/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-remove-scroll/sidecar/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/uid-safe/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-smooth/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/typanion/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/superstruct/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/class-validator/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/ajv/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/vine/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/typeschema/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/arktype/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/effect-ts/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/zod/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/joi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/vest/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/fluentvalidation-ts/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/nope/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/typebox/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/io-ts/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/yup/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/computed-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@hookform/resolvers/valibot/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pgpass/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/zod/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-pool/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/esbuild-register/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/minipass/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/minipass/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/minipass/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/detect-libc/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@isaacs/cliui/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/drizzle-orm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-refresh/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/braces/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/xtend/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fast-equals/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/bufferutil/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/camelcase-css/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/safe-buffer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/vaul/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/es6-weak-map/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/vite/node_modules/@esbuild/linux-x64/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/vite/node_modules/esbuild/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/vite/types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/vite/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/merge2/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/run-parallel/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-scale/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/memoizee/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-hook-form/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/enhanced-resolve/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss-import/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/thenify/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/es-define-property/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/.vite/deps_temp_d5324894/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/brace-expansion/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/prop-types/node_modules/react-is/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/prop-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/ai/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/go/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/wi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/lia/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/fa6/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/hi2/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/ri/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/bs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/gi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/fa/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/im/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/pi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/tfi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/hi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/io/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/di/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/lu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/vsc/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/gr/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/md/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/ci/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/io5/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/si/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/rx/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/lib/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/fc/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/bi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/ti/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/cg/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/tb/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/sl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-icons/fi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/es6-symbol/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/unpipe/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.isplainobject/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/color-name/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/js-tokens/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/typescript/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/content-type/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/object-inspect/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-promise/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/node-fetch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jsesc/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.isstring/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@rollup/rollup-linux-x64-gnu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@rollup/rollup-linux-x64-musl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wouter/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ee-first/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tslib/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tslib/modules/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/sucrase/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/destroy/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/date-fns/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/update-browserslist-db/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/didyoumean/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/picomatch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/type/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/passport-strategy/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/node/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/mime/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/express/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-path/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-timer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/passport-local/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-ease/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/express-session/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/jsonwebtoken/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-time/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/range-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/passport-google-oauth20/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/babel__template/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/connect/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/passport-oauth2/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/react/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/express-serve-static-core/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-scale/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/memoizee/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/prop-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/body-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/http-errors/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/react-dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/qs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/send/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/babel__generator/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/passport/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/phoenix/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-shape/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/estree/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/ws/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-interpolate/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/serve-static/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/oauth/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/babel__traverse/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/bcrypt/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-array/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/pg/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/connect-pg-simple/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/babel__core/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@types/d3-color/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.includes/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/jiti/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-cloudflare/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/body-parser/node_modules/debug/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/body-parser/node_modules/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/body-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/http-errors/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/statuses/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/oauth4webapi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-to-regexp/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-int8/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/buffer-equal-constant-time/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/supabase-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/realtime-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/auth-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/storage-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/functions-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/node-fetch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@supabase/postgrest-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lightningcss-linux-x64-musl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/event-emitter/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tapable/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/qs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/setprototypeof/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/json5/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/strip-ansi-cjs/node_modules/ansi-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/strip-ansi-cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/uid2/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-collapsible/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-tabs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-slider/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-portal/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-callback-ref/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-context-menu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-select/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-radio-group/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-roving-focus/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-checkbox/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-avatar/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-dismissable-layer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-presence/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-focus-scope/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-dialog/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-popper/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-visually-hidden/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-id/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-primitive/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-separator/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-size/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-scroll-area/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-arrow/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-compose-refs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/number/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-focus-guards/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-rect/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-label/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-context/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-previous/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-collection/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-aspect-ratio/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-popover/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-controllable-state/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-accordion/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-navigation-menu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-slot/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-tooltip/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-toast/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-menubar/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-direction/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-switch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-toggle-group/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/primitive/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-layout-effect/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-use-escape-keydown/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-toggle/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-progress/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-dropdown-menu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-menu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-hover-card/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/react-alert-dialog/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@radix-ui/rect/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/array-flatten/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@pkgjs/parseargs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tailwind-merge/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/send/node_modules/encodeurl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/send/node_modules/debug/node_modules/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/send/node_modules/debug/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/send/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/glob/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/glob/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/glob/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/signal-exit/dist/mjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/signal-exit/dist/cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/signal-exit/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/parseurl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/eventemitter3/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/bytes/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/side-channel/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/etag/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/normalize-path/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fast-glob/node_modules/glob-parent/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fast-glob/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/class-variance-authority/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/normalize-range/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-router-dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/encodeurl/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/passport/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/aria-hidden/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-format/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postgres-date/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/embla-carousel/cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/function-bind/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/next-tick/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/es6-iterator/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/stripe/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/stripe/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/stripe/cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tanstack/react-query/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tanstack/react-query/build/query-codemods/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@tanstack/query-core/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/finalhandler/node_modules/debug/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/finalhandler/node_modules/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/finalhandler/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ipaddr.js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/depd/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/cmdk/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-shape/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/es5-ext/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/tw-animate-css/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/cross-spawn/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@floating-ui/utils/dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@floating-ui/utils/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@floating-ui/dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@floating-ui/core/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@floating-ui/react-dom/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/use-sidecar/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/use-callback-ref/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi-cjs/node_modules/ansi-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi-cjs/node_modules/string-width/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi-cjs/node_modules/emoji-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi-cjs/node_modules/strip-ansi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi-cjs/node_modules/ansi-styles/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/wrap-ansi-cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/node-gyp-build/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/obuf/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/util-deprecate/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ws/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/chokidar/node_modules/glob-parent/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/chokidar/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lightningcss/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-interpolate/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.isboolean/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/cookie/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pirates/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.isinteger/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/node-addon-api/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/type-is/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/commander/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/serve-static/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@mercadopago/sdk-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@mercadopago/sdk-react/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/oauth/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss-load-config/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/convert-source-map/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/mime-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/internmap/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.isnumber/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/arg/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/zod-validation-error/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/string-width-cjs/node_modules/ansi-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/string-width-cjs/node_modules/emoji-regex/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/string-width-cjs/node_modules/strip-ansi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/string-width-cjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.castarray/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/micromatch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lightningcss-linux-x64-gnu/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/TransitionGroupContext/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/SwitchTransition/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/ReplaceTransition/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/Transition/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/TransitionGroup/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/config/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-transition-group/CSSTransition/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/esniff/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/reusify/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/lodash.once/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/to-regex-range/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-glob/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/anymatch/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/debug/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/mitt/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/semver/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/victory-vendor/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ms/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/define-data-property/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/vary/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/bcrypt/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/detect-node-es/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/rollup/dist/es/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/rollup/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-array/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/recharts-scale/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/fastq/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/baz/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/browser_field/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/nested_symlinks/mylib/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/multirepo/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/multirepo/packages/package-a/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/multirepo/packages/package-b/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/incorrect_main/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/false_main/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/symlinked/package/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/dot_main/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/invalid_main/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/resolver/dot_slash_main/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/test/module_dir/zmodules/bbb/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/resolve/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss-selector-parser/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/random-bytes/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/any-promise/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg/node_modules/postgres-bytea/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg/node_modules/pg-types/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg/node_modules/postgres-interval/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg/node_modules/postgres-date/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg/node_modules/postgres-array/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/connect-pg-simple/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-key/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-fullwidth-code-point/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/strip-ansi/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/source-map/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/accepts/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/drizzle-zod/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postcss-js/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-scurry/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-scurry/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-scurry/node_modules/lru-cache/dist/commonjs/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-scurry/node_modules/lru-cache/dist/esm/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-scurry/node_modules/lru-cache/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/path-scurry/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/pg-connection-string/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/d3-color/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/merge-descriptors/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/on-finished/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/escalade/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/has-property-descriptors/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/globals/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@ampproject/remapping/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/has-proto/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/mercadopago/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/regexparam/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/magic-string/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/has-symbols/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/ansi-styles/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/react-style-singleton/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/thenify-all/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-core-module/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/is-number/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/object-assign/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/postgres-array/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/esbuild/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@replit/vite-plugin-cartographer/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/@replit/vite-plugin-runtime-error-modal/package.json
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/package.json
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd $(find /var/www -name "package.json" -type f | head -1 | xargs dirname)
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/openid-client# pwd
+/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/openid-client
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/node_modules/openid-client# 

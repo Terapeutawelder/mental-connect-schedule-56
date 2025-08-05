@@ -1,0 +1,232 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl http://localhost:5000
+curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -I https://clinicaconexaomental.online
+HTTP/2 200 
+date: Wed, 30 Jul 2025 00:55:22 GMT
+content-type: text/html; charset=utf-8
+access-control-allow-origin: *
+access-control-allow-headers: *
+access-control-allow-methods: GET, HEAD, PUT, OPTIONS
+server: cloudflare
+cf-ray: 9670e3d77bb7dc78-FRA
+
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 logs conexaomental --lines 10
+[TAILING] Tailing last 10 lines for [conexaomental] process (change the value with --lines option)
+/root/.pm2/logs/conexaomental-error.log last 10 lines:
+0|conexaom |         ^
+0|conexaom | 
+0|conexaom | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaom |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaom |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaom |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaom |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaom |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaom | 
+0|conexaom | Node.js v18.20.8
+
+/root/.pm2/logs/conexaomental-out.log last 10 lines:
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|conexaomental  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|conexaomental  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|conexaomental  | Node.js v18.20.8
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

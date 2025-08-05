@@ -1,0 +1,139 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 3982118  │ 0s     │ 0    │ online    │ 0%       │ 21.1mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl http://localhost:5000
+curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -I https://clinicaconexaomental.online
+HTTP/2 200 
+date: Wed, 30 Jul 2025 01:04:55 GMT
+content-type: text/html; charset=utf-8
+access-control-allow-origin: *
+access-control-allow-headers: *
+access-control-allow-methods: GET, HEAD, PUT, OPTIONS
+server: cloudflare
+cf-ray: 9670f1d35dfed366-FRA
+
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl http://localhost:5000 | grep -i "planos"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo cat /etc/nginx/sites-enabled/conexaomental
+server {
+    server_name conexaomental.online www.conexaomental.online;
+    
+    # Frontend (React Static Files )
+location / {
+    root /opt/mental-connect-schedule-56/dist;
+    try_files $uri $uri/ /index.html;
+    index index.html;
+}
+ 
+    # API Backend
+    location /api/ {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # CORS headers
+        add_header 'Access-Control-Allow-Origin' 'https://clinicaconexaomental.online' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
+        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        
+        # Handle preflight requests
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' 'https://conexaomental.online' always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/conexaomental.online/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/conexaomental.online/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.conexaomental.online) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = conexaomental.online) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name conexaomental.online www.conexaomental.online;
+    return 404; # managed by Certbot
+
+
+
+
+}
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo tee /etc/nginx/sites-available/conexaomental > /dev/null 
+
+^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo tee /etc/nginx/sites-available/conexaomental > /dev/null <<'EOF'
+> server {
+>     listen 80;
+>     server_name clinicaconexaomental.online www.clinicaconexaomental.online;
+>     
+>     location / {
+>         proxy_pass http://localhost:5000;
+>         proxy_set_header Host $host;
+>         proxy_set_header X-Real-IP $remote_addr;
+>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+>         proxy_set_header X-Forwarded-Proto $scheme;
+>         proxy_redirect off;
+>     }
+> }
+> EOF
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -t
+nginx: [emerg] "location" directive is not allowed here in /etc/nginx/sites-enabled/default:1
+nginx: configuration file /etc/nginx/nginx.conf test failed
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo systemctl reload nginx
+Job for nginx.service failed.
+See "systemctl status nginx.service" and "journalctl -xe" for details.
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 restart conexaomental
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [conexaomental](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4036557  │ 0s     │ 925  │ online    │ 0%       │ 29.0mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl http://localhost:5000 | head -20
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl http://localhost:5000 | grep -i "planos")
+-bash: syntax error near unexpected token `)'
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl http://localhost:5000 | grep -i "planos"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

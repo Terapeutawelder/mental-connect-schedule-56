@@ -1,0 +1,127 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # 3. CONFIGURAR PM2 CORRETAMENTE
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pkill -f "npm start"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4047468  │ 0s     │ 0    │ online    │ 0%       │ 27.9mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 save
+[PM2] Saving current process list...
+[PM2] Successfully saved in /root/.pm2/dump.pm2
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 startup
+[PM2] Init System found: systemd
+Platform systemd
+Template
+[Unit]
+Description=PM2 process manager
+Documentation=https://pm2.keymetrics.io/
+After=network.target
+
+[Service]
+Type=forking
+User=root
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PM2_HOME=/root/.pm2
+PIDFile=/root/.pm2/pm2.pid
+Restart=on-failure
+
+ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect
+ExecReload=/usr/lib/node_modules/pm2/bin/pm2 reload all
+ExecStop=/usr/lib/node_modules/pm2/bin/pm2 kill
+
+[Install]
+WantedBy=multi-user.target
+
+Target path
+/etc/systemd/system/pm2-root.service
+Command list
+[ 'systemctl enable pm2-root' ]
+[PM2] Writing init configuration in /etc/systemd/system/pm2-root.service
+[PM2] Making script booting at startup...
+[PM2] [-] Executing: systemctl enable pm2-root...
+[PM2] [v] Command successfully executed.
++---------------------------------------+
+[PM2] Freeze a process list on reboot via:
+$ pm2 save
+
+[PM2] Remove init script via:
+$ pm2 unstartup systemd
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo rm /etc/nginx/sites-enabled/default
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -t && sudo systemctl reload nginx
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# rm -rf dist/
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# npm install
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'react-router@7.6.3',
+npm warn EBADENGINE   required: { node: '>=20.0.0' },
+npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+npm warn EBADENGINE }
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'react-router-dom@7.6.3',
+npm warn EBADENGINE   required: { node: '>=20.0.0' },
+npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+npm warn EBADENGINE }
+
+up to date, audited 550 packages in 7s
+
+70 packages are looking for funding
+  run `npm fund` for details
+
+10 vulnerabilities (3 low, 7 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental" npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.15 building for production...
+transforming (4) src/App.tsxBrowserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 2633 modules transformed.
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/OnlineTherapySection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/SearchSection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/components/sections/ProfessionalsSection.tsx is dynamically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx but also statically imported by /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/client/src/pages/Index.tsx, dynamic import will not move module into another chunk.
+
+../dist/public/index.html                                                 0.69 kB │ gzip:   0.40 kB
+../dist/public/assets/Header de login (3)_1752464376695-qEK9OtF0.png  2,911.42 kB
+../dist/public/assets/index-DPZaXoqA.css                                112.59 kB │ gzip:  17.34 kB
+../dist/public/assets/index-tZJhqzCc.js                               1,006.77 kB │ gzip: 267.27 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 27.44s
+
+  dist/index.js  100.9kb
+
+⚡ Done in 51ms
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

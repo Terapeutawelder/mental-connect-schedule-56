@@ -1,0 +1,108 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cat > .env << 'EOF'
+> DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable"
+> NODE_ENV=production
+> EOF
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4092082  │ 0s     │ 0    │ online    │ 0%       │ 21.7mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | head -10
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://localhost:5000 | grep -i "planos\|faq"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cat > .env << 'EOF'
+> DATABASE_URL="postgresql://cloud_admin@conexaomental.online:5432/conexaomental?sslmode=require"
+> NODE_ENV=production
+> EOF
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4093055  │ 0s     │ 0    │ online    │ 0%       │ 18.0mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://localhost:5000
+*   Trying ::1:5000...
+* TCP_NODELAY set
+* Immediate connect fail for ::1: Cannot assign requested address
+* Closing connection 0
+curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4093856  │ 1s     │ 14   │ online    │ 0%       │ 59.4mb   │ root     │ disabled │
+│ 1  │ conexaomental    │ default     │ N/A     │ fork    │ 4093893  │ 0s     │ 0    │ online    │ 0%       │ 23.9mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://localhost:5000
+*   Trying ::1:5000...
+* TCP_NODELAY set
+* Immediate connect fail for ::1: Cannot assign requested address
+* Closing connection 0
+curl: (7) Couldn't connect to server
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0, 1 ])
+[PM2] [conexaomental](0) ✓
+[PM2] [conexaomental](1) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 kill
+[PM2][WARN] No process found
+[PM2] [v] All Applications Stopped
+[PM2] [v] PM2 Daemon Stopped
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pkill -f node
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pkill -f npm
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# netstat -tlnp | grep :5000
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# lsof -i :5000
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable" npm start
+
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.js
+
+Warning: connect.session() MemoryStore is not
+designed for a production environment, as it will leak
+memory, and will not scale past a single process.
+✅ API externa configurada em /api/v1
+📚 Documentação: GET /api/v1/status
+🔑 Autenticação: Bearer token nas rotas protegidas
+✅ Admin Integration routes configuradas
+🔌 API externa disponível em /api/v1
+⚙️ Admin integrações disponível em /api/admin
+11:22:35 PM [express] serving on port 5000
+❌ Database connection attempt 1 failed: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:conexaomental.online, DNS:www.conexaomental.online
+🔄 Retrying in 1000ms...
+❌ Database connection attempt 2 failed: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:conexaomental.online, DNS:www.conexaomental.online
+🔄 Retrying in 2000ms...
+❌ Database connection attempt 3 failed: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:conexaomental.online, DNS:www.conexaomental.online
+❌ Failed to connect to database after 3 attempts
+11:23:06 PM [express] GET /api/v1/validate/code 200 in 47ms
+
+^CShutting down gracefully...
+
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

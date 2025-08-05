@@ -1,0 +1,100 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # TESTE FINAL
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s https://clinicaconexaomental.online | grep -i "sessão de acolhimento"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # PARAR APLICAÇÃO COMPLETAMENTE
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 kill
+[PM2][WARN] No process found
+[PM2] [v] All Applications Stopped
+[PM2] [v] PM2 Daemon Stopped
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # CORRIGIR NGINX COM DOMÍNIO CORRETO
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo tee /etc/nginx/sites-available/conexaomental << 'EOF'
+> server {
+>     listen 80 default_server;
+>     server_name clinicaconexaomental.online www.clinicaconexaomental.online;
+>     
+>     location / {
+>         proxy_pass http://127.0.0.1:5000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection 'upgrade';
+>         proxy_set_header Host $host;
+>         proxy_set_header X-Real-IP $remote_addr;
+>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+>         proxy_set_header X-Forwarded-Proto $scheme;
+>         proxy_cache_bypass $http_upgrade;
+>         proxy_read_timeout 86400;
+>         
+>         # Headers anti-cache
+>         add_header Cache-Control "no-cache, no-store, must-revalidate";
+>         add_header Pragma "no-cache";
+>         add_header Expires "0";
+>     }
+> }
+> EOF
+server {
+    listen 80 default_server;
+    server_name clinicaconexaomental.online www.clinicaconexaomental.online;
+    
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+        
+        # Headers anti-cache
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+}
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # ATIVAR SITE E RECARREGAR NGINX
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo rm -f /etc/nginx/sites-enabled/default
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo ln -sf /etc/nginx/sites-available/conexaomental /etc/nginx/sites-enabled/
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # RESTART APLICAÇÃO
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable" NODE_ENV=production pm2 start npm --name "conexaomental" -- start
+[PM2] Spawning PM2 daemon with pm2_home=/root/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4189504  │ 0s     │ 0    │ online    │ 0%       │ 33.5mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# # AGUARDAR INICIALIZAÇÃO
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep
+sleep: missing operand
+Try 'sleep --help' for more information.
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://clinicaconexaomental.online | wc -c
+0
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://clinicaconexaomental.online | grep -i "sessão de acolhimento"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -s http://clinicaconexaomental.online | grep -i "como funciona o atendimento"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

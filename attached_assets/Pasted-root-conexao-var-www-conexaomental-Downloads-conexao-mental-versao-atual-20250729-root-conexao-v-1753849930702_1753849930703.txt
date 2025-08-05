@@ -1,0 +1,81 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [all](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 kill
+[PM2][WARN] No process found
+[PM2] [v] All Applications Stopped
+[PM2] [v] PM2 Daemon Stopped
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# export NODE_ENV=development
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# export DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable"
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# tsx server/index.ts &
+[1] 59787
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# TSX_PID=$!
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 20
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'vite' imported from /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/server/vite.ts
+    at packageResolve (node:internal/modules/esm/resolve:873:9)
+    at moduleResolve (node:internal/modules/esm/resolve:946:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at nextResolve (node:internal/modules/esm/hooks:864:28)
+    at resolveBase (file:///usr/lib/node_modules/tsx/dist/esm/index.mjs?1753849861126:2:3811)
+    at resolveDirectory (file:///usr/lib/node_modules/tsx/dist/esm/index.mjs?1753849861126:2:4310)
+    at resolveTsPaths (file:///usr/lib/node_modules/tsx/dist/esm/index.mjs?1753849861126:2:5051)
+    at async resolve (file:///usr/lib/node_modules/tsx/dist/esm/index.mjs?1753849861126:2:5422)
+    at async nextResolve (node:internal/modules/esm/hooks:864:22)
+    at async Hooks.resolve (node:internal/modules/esm/hooks:306:24) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v20.19.4
+[1]+  Exit 1                  tsx server/index.ts
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# echo "=== TESTE LOCAL ==="
+=== TESTE LOCAL ===
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# LOCAL_SIZE=$(curl -s http://127.0.0.1:5000 | wc -c)
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# echo "Local: $LOCAL_SIZE bytes"
+Local: 0 bytes
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# if [ "$LOCAL_SIZE" -gt 1000 ]; then
+>     echo "✅ TSX FUNCIONANDO!"
+>     kill $TSX_PID
+>     sleep 3
+>     
+>     cat > ecosystem.config.js << 'EOF'
+> module.exports = {
+>   apps: [{
+>     name: 'conexaomental',
+>     script: 'tsx',
+>     args: 'server/index.ts',
+>     env: {
+>       NODE_ENV: 'development',
+>       DATABASE_URL: 'postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable'
+>     }
+>   }]
+> }
+> EOF
+>     
+>     pm2 start ecosystem.config.js
+>     sleep 30
+>     
+>     DOMAIN_SIZE=$(curl -s http://conexaomental.online | wc -c)
+>     echo "Domínio: $DOMAIN_SIZE bytes"
+>     
+>     curl -s http://conexaomental.online | grep -i "sessão de acolhimento" && echo "✅ FUNCIONOU!"
+> else
+>     echo "❌ TSX falhou"
+>     kill $TSX_PID 2>/dev/null
+> fi
+❌ TSX falhou
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 

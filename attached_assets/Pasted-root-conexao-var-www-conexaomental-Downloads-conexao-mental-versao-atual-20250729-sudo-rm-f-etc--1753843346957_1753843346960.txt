@@ -1,0 +1,259 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo rm -f /etc/nginx/sites-enabled/*
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo rm -f /etc/nginx/sites-available/default*
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo tee /etc/nginx/sites-available/conexaomental << 'EOF'
+> server {
+>     listen 80 default_server;
+>     server_name conexaomental.online www.conexaomental.online _;
+>     
+>     location / {
+>         proxy_pass http://127.0.0.1:5000;
+>         proxy_http_version 1.1;
+>         proxy_set_header Upgrade $http_upgrade;
+>         proxy_set_header Connection 'upgrade';
+>         proxy_set_header Host $host;
+>         proxy_set_header X-Real-IP $remote_addr;
+>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+>         proxy_set_header X-Forwarded-Proto $scheme;
+>         proxy_cache_bypass $http_upgrade;
+>         proxy_read_timeout 86400;
+>     }
+> }
+> EOF
+server {
+    listen 80 default_server;
+    server_name conexaomental.online www.conexaomental.online _;
+    
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+    }
+}
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo ln -s /etc/nginx/sites-available/conexaomental /etc/nginx/sites-enabled/
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sudo systemctl reload nginx
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 logs conexaomental --lines 10
+[TAILING] Tailing last 10 lines for [conexaomental] process (change the value with --lines option)
+/root/.pm2/logs/conexaomental-error.log last 10 lines:
+0|conexaom |   throw new Error(
+0|conexaom |         ^
+0|conexaom | 
+0|conexaom | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaom |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaom |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaom |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaom |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaom | 
+0|conexaom | Node.js v20.19.4
+
+/root/.pm2/logs/conexaomental-out.log last 10 lines:
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+0|conexaom | 
+0|conexaom | > rest-express@1.0.0 start
+0|conexaom | > NODE_ENV=production node dist/index.js
+0|conexaom | 
+
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+0|conexaomental  | file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193
+0|conexaomental  |   throw new Error(
+0|conexaomental  |         ^
+0|conexaomental  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|conexaomental  |     at file:///var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729/dist/index.js:193:9
+0|conexaomental  |     at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+0|conexaomental  |     at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+0|conexaomental  |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|conexaomental  | Node.js v20.19.4
+0|conexaomental  | > rest-express@1.0.0 start
+0|conexaomental  | > NODE_ENV=production node dist/index.js
+^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4124579  │ 0s     │ 0    │ online    │ 0%       │ 18.4mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# netstat -tlnp | grep :5000
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -4 -v http://127.0.0.1:5000
+*   Trying 127.0.0.1:5000...
+* TCP_NODELAY set
+* connect to 127.0.0.1 port 5000 failed: Connection refused
+* Failed to connect to 127.0.0.1 port 5000: Connection refused
+* Closing connection 0
+curl: (7) Failed to connect to 127.0.0.1 port 5000: Connection refused
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -4 -v http://127.0.0.1:5000
+*   Trying 127.0.0.1:5000...
+* TCP_NODELAY set
+* connect to 127.0.0.1 port 5000 failed: Connection refused
+* Failed to connect to 127.0.0.1 port 5000: Connection refused
+* Closing connection 0
+curl: (7) Failed to connect to 127.0.0.1 port 5000: Connection refused
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://conexaomental.online
+*   Trying 157.173.120.220:80...
+* TCP_NODELAY set
+* Connected to conexaomental.online (157.173.120.220) port 80 (#0)
+> GET / HTTP/1.1
+> Host: conexaomental.online
+> User-Agent: curl/7.68.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 502 Bad Gateway
+< Server: nginx/1.18.0 (Ubuntu)
+< Date: Wed, 30 Jul 2025 02:41:51 GMT
+< Content-Type: text/html
+< Content-Length: 166
+< Connection: keep-alive
+< 
+<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+</body>
+</html>
+* Connection #0 to host conexaomental.online left intact
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729#

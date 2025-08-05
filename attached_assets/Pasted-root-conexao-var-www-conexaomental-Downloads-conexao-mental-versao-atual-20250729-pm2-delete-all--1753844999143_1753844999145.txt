@@ -1,0 +1,171 @@
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 start npm --name "conexaomental" -- start
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4124579  │ 0s     │ 0    │ online    │ 0%       │ 18.4mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# netstat -tlnp | grep :5000
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -4 -v http://127.0.0.1:5000
+*   Trying 127.0.0.1:5000...
+* TCP_NODELAY set
+* connect to 127.0.0.1 port 5000 failed: Connection refused
+* Failed to connect to 127.0.0.1 port 5000: Connection refused
+* Closing connection 0
+curl: (7) Failed to connect to 127.0.0.1 port 5000: Connection refused
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -4 -v http://127.0.0.1:5000
+*   Trying 127.0.0.1:5000...
+* TCP_NODELAY set
+* connect to 127.0.0.1 port 5000 failed: Connection refused
+* Failed to connect to 127.0.0.1 port 5000: Connection refused
+* Closing connection 0
+curl: (7) Failed to connect to 127.0.0.1 port 5000: Connection refused
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://conexaomental.online
+*   Trying 157.173.120.220:80...
+* TCP_NODELAY set
+* Connected to conexaomental.online (157.173.120.220) port 80 (#0)
+> GET / HTTP/1.1
+> Host: conexaomental.online
+> User-Agent: curl/7.68.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 502 Bad Gateway
+< Server: nginx/1.18.0 (Ubuntu)
+< Date: Wed, 30 Jul 2025 02:41:51 GMT
+< Content-Type: text/html
+< Content-Length: 166
+< Connection: keep-alive
+< 
+<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+</body>
+</html>
+* Connection #0 to host conexaomental.online left intact
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# ^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# cd /var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 delete all
+[PM2] Applying action deleteProcessId on app [all](ids: [ 0 ])
+[PM2] [conexaomental](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 kill
+[PM2][WARN] No process found
+[PM2] [v] All Applications Stopped
+[PM2] [v] PM2 Daemon Stopped
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# DATABASE_URL="postgresql://cloud_admin@localhost:5432/conexaomental?sslmode=disable" pm2 start npm --name "conexaomental" -- start
+[PM2] Spawning PM2 daemon with pm2_home=/root/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ conexaomental    │ default     │ N/A     │ fork    │ 4130415  │ 0s     │ 0    │ online    │ 0%       │ 28.9mb   │ root     │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# sleep 15
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# pm2 logs conexaomental --lines 5
+[TAILING] Tailing last 5 lines for [conexaomental] process (change the value with --lines option)
+/root/.pm2/logs/conexaomental-error.log last 5 lines:
+0|conexaom | Node.js v20.19.4
+0|conexaom | Warning: connect.session() MemoryStore is not
+0|conexaom | designed for a production environment, as it will leak
+0|conexaom | memory, and will not scale past a single process.
+0|conexaom | ❌ Failed to connect to database after 3 attempts
+
+/root/.pm2/logs/conexaomental-out.log last 5 lines:
+0|conexaom | 🔄 Retrying in 1000ms...
+0|conexaom | ❌ Database connection attempt 2 failed: connect ECONNREFUSED 127.0.0.1:443
+0|conexaom | 🔄 Retrying in 2000ms...
+0|conexaom | ❌ Database connection attempt 3 failed: connect ECONNREFUSED 127.0.0.1:443
+0|conexaom | 11:44:36 PM [express] POST /api/v1/validate/code 200 in 23ms
+
+0|conexaomental  | 11:46:15 PM [express] POST /api/v1/validate/code 200 in 17ms
+0|conexaomental  | 11:46:26 PM [express] POST /api/v1/validate/code 200 in 9ms
+0|conexaomental  | 11:47:52 PM [express] POST /api/v1/validate/code 200 in 14ms
+0|conexaomental  | 11:48:43 PM [express] POST /api/v1/validate/code 200 in 5ms
+0|conexaomental  | 11:49:38 PM [express] POST /api/v1/validate/code 200 in 4ms
+0|conexaomental  | 11:51:14 PM [express] POST /api/v1/validate/code 200 in 6ms
+0|conexaomental  | 11:51:33 PM [express] POST /api/v1/validate/code 200 in 7ms
+0|conexaomental  | 11:53:09 PM [express] POST /api/v1/validate/code 200 in 13ms
+0|conexaomental  | 11:53:17 PM [express] POST /api/v1/validate/code 200 in 15ms
+0|conexaomental  | 11:54:44 PM [express] POST /api/v1/validate/code 200 in 29ms
+0|conexaomental  | 11:55:41 PM [express] POST /api/v1/validate/code 200 in 9ms
+0|conexaomental  | 11:56:22 PM [express] POST /api/v1/validate/code 200 in 4ms
+0|conexaomental  | 11:57:57 PM [express] POST /api/v1/validate/code 200 in 7ms
+0|conexaomental  | 11:58:04 PM [express] POST /api/v1/validate/code 200 in 8ms
+0|conexaomental  | 11:59:32 PM [express] POST /api/v1/validate/code 200 in 52ms
+0|conexaomental  | 12:00:47 AM [express] POST /api/v1/validate/code 200 in 6ms
+0|conexaomental  | 12:01:19 AM [express] POST /api/v1/validate/code 200 in 5ms
+0|conexaomental  | 12:02:55 AM [express] POST /api/v1/validate/code 200 in 10ms
+0|conexaomental  | 12:03:15 AM [express] POST /api/v1/validate/code 200 in 11ms
+0|conexaomental  | 12:04:33 AM [express] POST /api/v1/validate/code 200 in 49ms
+0|conexaomental  | 12:05:26 AM [express] POST /api/v1/validate/code 200 in 6ms
+0|conexaomental  | 12:06:07 AM [express] POST /api/v1/validate/code 200 in 6ms
+0|conexaomental  | 12:07:43 AM [express] POST /api/v1/validate/code 200 in 3ms
+0|conexaomental  | 12:08:15 AM [express] POST /api/v1/validate/code 200 in 7ms
+^C
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -4 -s http://127.0.0.1:5000 | head -5
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# curl -v http://conexaomental.online
+*   Trying 157.173.120.220:80...
+* TCP_NODELAY set
+* Connected to conexaomental.online (157.173.120.220) port 80 (#0)
+> GET / HTTP/1.1
+> Host: conexaomental.online
+> User-Agent: curl/7.68.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: nginx/1.18.0 (Ubuntu)
+< Date: Wed, 30 Jul 2025 03:08:30 GMT
+< Content-Type: text/html; charset=UTF-8
+< Content-Length: 687
+< Connection: keep-alive
+< X-Powered-By: Express
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: DENY
+< X-XSS-Protection: 1; mode=block
+< Strict-Transport-Security: max-age=31536000; includeSubDomains
+< Referrer-Policy: strict-origin-when-cross-origin
+< Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+< Access-Control-Allow-Headers: Content-Type, Authorization
+< Access-Control-Allow-Credentials: true
+< Accept-Ranges: bytes
+< Cache-Control: public, max-age=0
+< Last-Modified: Wed, 30 Jul 2025 02:08:33 GMT
+< ETag: W/"2af-1985916a727"
+< 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <script type="module" crossorigin src="/assets/index-tZJhqzCc.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DPZaXoqA.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+  </body>
+* Connection #0 to host conexaomental.online left intact
+</html>root@conexao:/var/www/conexaomental/Downloads/conexao-mental-versao-atual-20250729# 
